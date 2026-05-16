@@ -1,0 +1,2855 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mise en Place</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <script crossorigin src="libs/react.min.js"></script>
+  <script crossorigin src="libs/react-dom.min.js"></script>
+  <script src="libs/babel.min.js"></script>
+  <script src="libs/supabase.min.js"></script>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg: #E8E2D5;
+      --header: #1D3829;
+      --dark-green: #1D3829;
+      --text: #1a1a1a;
+      --text-muted: #999;
+      --text-secondary: #666;
+      --border: #DDD6C8;
+      --card-bg: #fff;
+      --orange: #C1440E;
+      --star: #D4A017;
+      --easy-bg: #E8F5EA;
+      --easy-text: #2E7D32;
+      --medium-bg: #FFF8E1;
+      --medium-text: #9A6500;
+      --medium-border: #E8A000;
+      --tab-active: #C1440E;
+      --input-bg: #FAF7F2;
+    }
+
+    body {
+      background: var(--bg);
+      font-family: 'Inter', system-ui, sans-serif;
+      color: var(--text);
+      min-height: 100vh;
+    }
+
+    /* ── LOGIN ── */
+    .login-page {
+      min-height: 100vh;
+      background: var(--bg);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+    }
+    .login-logo {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      margin-bottom: 32px;
+      gap: 12px;
+    }
+    .login-logo-icon {
+      width: 60px;
+      height: 60px;
+      background: var(--dark-green);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #fff;
+      font-size: 22px;
+    }
+    .login-logo h1 {
+      font-family: 'Playfair Display', serif;
+      font-size: 32px;
+      color: var(--dark-green);
+      font-weight: 600;
+    }
+    .login-logo p {
+      font-size: 11px;
+      letter-spacing: 2.5px;
+      color: var(--text-muted);
+      text-transform: uppercase;
+    }
+    .login-tabs {
+      display: flex;
+      background: #f3f4f6;
+      border-radius: 10px;
+      padding: 4px;
+      margin-bottom: 24px;
+      gap: 4px;
+    }
+    .login-tab {
+      flex: 1;
+      padding: 10px;
+      border: none;
+      background: transparent;
+      border-radius: 8px;
+      font-family: inherit;
+      font-size: 13px;
+      font-weight: 600;
+      color: #888;
+      cursor: pointer;
+      transition: all 0.2s;
+      letter-spacing: 0.3px;
+    }
+    .login-tab.active {
+      background: #fff;
+      color: var(--dark);
+      box-shadow: 0 1px 4px rgba(0,0,0,0.1);
+    }
+    .login-card {
+      background: #fff;
+      border-radius: 16px;
+      padding: 36px;
+      width: 100%;
+      max-width: 440px;
+      box-shadow: 0 2px 20px rgba(0,0,0,0.06);
+    }
+    .login-error {
+      background: #FEE2E2;
+      color: #B91C1C;
+      padding: 10px 14px;
+      border-radius: 6px;
+      font-size: 13px;
+      margin-bottom: 16px;
+    }
+    .form-group { margin-bottom: 20px; }
+    .form-group label {
+      display: block;
+      font-size: 11px;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      color: var(--text-secondary);
+      margin-bottom: 8px;
+      font-weight: 600;
+    }
+    .form-input {
+      width: 100%;
+      padding: 14px 16px;
+      background: var(--input-bg);
+      border: 1.5px solid var(--border);
+      border-radius: 8px;
+      font-size: 15px;
+      color: var(--text);
+      font-family: inherit;
+      outline: none;
+      transition: border-color 0.2s;
+    }
+    .form-input:focus { border-color: var(--dark-green); }
+    .form-input::placeholder { color: #ccc; }
+    .password-wrap { position: relative; }
+    .password-toggle {
+      position: absolute;
+      right: 14px;
+      top: 50%;
+      transform: translateY(-50%);
+      background: none;
+      border: none;
+      cursor: pointer;
+      color: #bbb;
+      font-size: 16px;
+      padding: 4px;
+      line-height: 1;
+    }
+    .btn-signin {
+      width: 100%;
+      padding: 16px;
+      background: var(--dark-green);
+      color: #fff;
+      border: none;
+      border-radius: 8px;
+      font-size: 13px;
+      font-weight: 600;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      cursor: pointer;
+      margin-top: 8px;
+      font-family: inherit;
+      transition: opacity 0.2s;
+    }
+    .btn-signin:hover { opacity: 0.88; }
+    .reset-link {
+      display: block;
+      text-align: center;
+      margin-top: 18px;
+      font-size: 13px;
+      color: var(--text-muted);
+      text-decoration: underline;
+      cursor: pointer;
+      background: none;
+      border: none;
+      font-family: inherit;
+    }
+    .reset-link:hover { color: var(--text-secondary); }
+
+    /* ── HEADER ── */
+    .app-header {
+      background: var(--dark-green);
+      padding: 0 32px;
+      height: 56px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+    .header-brand {
+      display: flex;
+      align-items: center;
+      font-family: 'Playfair Display', serif;
+      color: #fff;
+      font-size: 18px;
+      gap: 0;
+    }
+    .header-brand .sparkle { margin-right: 8px; }
+    .header-brand .slash {
+      font-style: italic;
+      color: rgba(255,255,255,0.6);
+      margin-left: 8px;
+      font-size: 16px;
+    }
+    .header-right {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+    .header-user {
+      font-size: 11px;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.65);
+    }
+    .header-user span { color: #fff; font-weight: 600; }
+    .btn-signout {
+      padding: 7px 16px;
+      background: transparent;
+      border: 1.5px solid rgba(255,255,255,0.45);
+      color: #fff;
+      border-radius: 6px;
+      font-size: 11px;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      cursor: pointer;
+      font-family: inherit;
+      font-weight: 500;
+      transition: border-color 0.2s;
+    }
+    .btn-signout:hover { border-color: #fff; }
+    .btn-community {
+      padding: 9px 20px;
+      background: #fff;
+      border: none;
+      color: var(--dark);
+      border-radius: 8px;
+      font-size: 12px;
+      letter-spacing: 0.5px;
+      text-transform: uppercase;
+      cursor: pointer;
+      font-family: inherit;
+      font-weight: 700;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+      transition: transform 0.15s, box-shadow 0.15s;
+    }
+    .btn-community:hover { transform: translateY(-1px); box-shadow: 0 4px 14px rgba(0,0,0,0.25); }
+
+    /* ── COMMUNITY PAGE ── */
+    .community-page {
+      min-height: 100vh;
+      background: var(--bg);
+      display: flex;
+      flex-direction: column;
+    }
+    .community-header {
+      background: var(--header);
+      padding: 0 32px;
+      height: 64px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-shrink: 0;
+    }
+    .community-header-brand {
+      font-family: 'Playfair Display', serif;
+      font-size: 20px;
+      color: #fff;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .community-header-right { display: flex; gap: 12px; align-items: center; }
+    .btn-back-recipes {
+      padding: 7px 16px;
+      background: transparent;
+      border: 1.5px solid rgba(255,255,255,0.45);
+      color: #fff;
+      border-radius: 6px;
+      font-size: 11px;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      cursor: pointer;
+      font-family: inherit;
+      font-weight: 500;
+      transition: border-color 0.2s;
+    }
+    .btn-back-recipes:hover { border-color: #fff; }
+    .community-content { padding: 32px; max-width: 1100px; margin: 0 auto; width: 100%; }
+    .community-title-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 28px;
+      flex-wrap: wrap;
+      gap: 16px;
+    }
+    .community-title-row h2 {
+      font-family: 'Playfair Display', serif;
+      font-size: 32px;
+      color: var(--text);
+    }
+    .community-title-row p { font-size: 14px; color: var(--text-secondary); margin-top: 4px; }
+    .btn-share-recipe {
+      padding: 12px 24px;
+      background: var(--dark-green);
+      color: #fff;
+      border: none;
+      border-radius: 8px;
+      font-size: 13px;
+      font-family: inherit;
+      font-weight: 600;
+      cursor: pointer;
+      letter-spacing: 0.5px;
+      transition: opacity 0.2s;
+    }
+    .btn-share-recipe:hover { opacity: 0.85; }
+    .community-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 20px;
+    }
+    .community-card {
+      background: #fff;
+      border-radius: 14px;
+      overflow: hidden;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+      transition: transform 0.2s, box-shadow 0.2s;
+      cursor: pointer;
+    }
+    .community-card:hover { transform: translateY(-3px); box-shadow: 0 6px 20px rgba(0,0,0,0.1); }
+    .community-card-body { padding: 18px; }
+    .community-card-meta {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 8px;
+    }
+    .community-card-cat {
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      color: var(--dark-green);
+    }
+    .community-card-by {
+      font-size: 11px;
+      color: var(--text-secondary);
+    }
+    .community-card h3 {
+      font-family: 'Playfair Display', serif;
+      font-size: 18px;
+      color: var(--text);
+      margin-bottom: 10px;
+      line-height: 1.3;
+    }
+    .community-card-footer {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-top: 14px;
+      padding-top: 14px;
+      border-top: 1px solid var(--border);
+    }
+    .btn-save-recipe {
+      padding: 8px 18px;
+      background: var(--dark-green);
+      color: #fff;
+      border: none;
+      border-radius: 6px;
+      font-size: 12px;
+      font-family: inherit;
+      font-weight: 600;
+      cursor: pointer;
+      transition: opacity 0.2s;
+    }
+    .btn-save-recipe:hover { opacity: 0.85; }
+    .btn-save-recipe.saved { background: #888; cursor: default; }
+    .community-empty {
+      text-align: center;
+      padding: 80px 20px;
+      color: var(--text-secondary);
+    }
+    .community-empty .community-icon { font-size: 56px; margin-bottom: 16px; }
+    .community-empty h3 { font-family: 'Playfair Display', serif; font-size: 24px; color: var(--text); margin-bottom: 8px; }
+    .community-loading { text-align: center; padding: 60px; color: var(--text-secondary); font-size: 16px; }
+    .share-modal-overlay {
+      position: fixed; inset: 0; background: rgba(0,0,0,0.5);
+      display: flex; align-items: center; justify-content: center; z-index: 300;
+    }
+    .share-modal {
+      background: #fff; border-radius: 16px; padding: 32px;
+      max-width: 480px; width: 90%; max-height: 80vh; overflow-y: auto;
+    }
+    .share-modal h3 { font-family: 'Playfair Display', serif; font-size: 22px; margin-bottom: 6px; }
+    .share-modal p { font-size: 14px; color: var(--text-secondary); margin-bottom: 14px; }
+    .share-search {
+      display: flex; align-items: center; gap: 10px;
+      background: #f3f4f6; border-radius: 10px; padding: 10px 14px;
+      margin-bottom: 14px;
+    }
+    .share-search input {
+      border: none; background: transparent; font-family: inherit;
+      font-size: 14px; width: 100%; outline: none; color: var(--text);
+    }
+    .share-recipe-list { display: flex; flex-direction: column; gap: 8px; margin-bottom: 20px; max-height: 320px; overflow-y: auto; }
+    .share-recipe-item {
+      display: flex; align-items: center; gap: 12px;
+      padding: 12px 16px; border: 1.5px solid var(--border);
+      border-radius: 10px; cursor: pointer; transition: border-color 0.2s, background 0.2s;
+    }
+    .share-recipe-item:hover { border-color: var(--dark-green); background: #f9f9f7; }
+    .share-recipe-item.selected { border-color: var(--dark-green); background: #f0f5f0; }
+    .share-recipe-item-info { display: flex; flex-direction: column; gap: 2px; }
+    .share-recipe-item-title { font-size: 14px; font-weight: 600; color: var(--text); }
+    .share-recipe-item-meta { font-size: 11px; color: var(--text-secondary); text-transform: uppercase; letter-spacing: 0.5px; }
+    .share-modal-actions { display: flex; gap: 10px; justify-content: flex-end; }
+    .btn-cancel-share {
+      padding: 10px 20px; background: transparent; border: 1.5px solid var(--border);
+      border-radius: 8px; font-family: inherit; font-size: 13px; cursor: pointer;
+    }
+    .btn-confirm-share {
+      padding: 10px 20px; background: var(--dark-green); color: #fff;
+      border: none; border-radius: 8px; font-family: inherit; font-size: 13px;
+      font-weight: 600; cursor: pointer; transition: opacity 0.2s;
+    }
+    .btn-confirm-share:hover { opacity: 0.85; }
+    .btn-confirm-share:disabled { opacity: 0.5; cursor: default; }
+
+    /* ── CATEGORY NAV ── */
+    .category-nav {
+      background: #fff;
+      border-bottom: 1px solid var(--border);
+      padding: 0 32px;
+      overflow-x: auto;
+      scrollbar-width: none;
+    }
+    .category-nav::-webkit-scrollbar { display: none; }
+    .category-nav-inner {
+      display: flex;
+      white-space: nowrap;
+    }
+    .cat-tab {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      padding: 14px 16px;
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      color: var(--text-secondary);
+      cursor: pointer;
+      border: none;
+      background: none;
+      border-bottom: 2.5px solid transparent;
+      transition: color 0.15s, border-color 0.15s;
+      font-family: inherit;
+      white-space: nowrap;
+    }
+    .cat-tab:hover { color: var(--text); }
+    .cat-tab.active {
+      color: var(--text);
+      border-bottom-color: var(--tab-active);
+    }
+    .cat-count {
+      background: #1D3829;
+      color: #fff;
+      font-size: 10px;
+      font-weight: 700;
+      min-width: 18px;
+      height: 18px;
+      border-radius: 9px;
+      padding: 0 5px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .cat-tab.active .cat-count { background: var(--tab-active); }
+
+    /* ── RECIPE LIST ── */
+    .page-content {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 40px 32px 80px;
+    }
+    .list-header {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      margin-bottom: 32px;
+      gap: 16px;
+    }
+    .list-title h2 {
+      font-family: 'Playfair Display', serif;
+      font-size: 36px;
+      color: var(--dark-green);
+      font-weight: 600;
+    }
+    .list-title p {
+      font-size: 11px;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      margin-top: 4px;
+    }
+    .btn-add {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 14px 24px;
+      background: var(--orange);
+      color: #fff;
+      border: none;
+      border-radius: 8px;
+      font-size: 13px;
+      font-weight: 600;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      cursor: pointer;
+      font-family: inherit;
+      transition: opacity 0.2s;
+      white-space: nowrap;
+      flex-shrink: 0;
+    }
+    .btn-add:hover { opacity: 0.88; }
+    .search-bar {
+      position: relative;
+      margin-bottom: 40px;
+    }
+    .search-bar input {
+      width: 100%;
+      padding: 16px 20px 16px 50px;
+      background: #fff;
+      border: 1.5px solid var(--border);
+      border-radius: 40px;
+      font-size: 15px;
+      color: var(--text);
+      font-family: inherit;
+      outline: none;
+      transition: border-color 0.2s;
+    }
+    .search-bar input:focus { border-color: var(--dark-green); }
+    .search-bar input::placeholder { color: #bbb; }
+    .search-icon {
+      position: absolute;
+      left: 18px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: #bbb;
+      font-size: 16px;
+      pointer-events: none;
+    }
+    .category-section { margin-bottom: 48px; }
+    .section-header {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 20px;
+    }
+    .section-header h3 {
+      font-family: 'Playfair Display', serif;
+      font-size: 22px;
+      color: var(--dark-green);
+      font-weight: 700;
+    }
+    .section-count {
+      font-size: 14px;
+      color: var(--text-muted);
+      font-weight: 400;
+      font-family: 'Inter', sans-serif;
+    }
+    .recipe-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+      gap: 20px;
+    }
+
+    /* ── RECIPE CARD ── */
+    .recipe-card {
+      background: var(--card-bg);
+      border-radius: 14px;
+      overflow: hidden;
+      border: 1.5px solid transparent;
+      cursor: pointer;
+      transition: transform 0.2s, box-shadow 0.2s, border-color 0.2s;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+    }
+    .recipe-card:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 24px rgba(0,0,0,0.1);
+    }
+    .card-photo {
+      width: 100%;
+      height: 200px;
+      object-fit: cover;
+      display: block;
+    }
+    .card-photo-placeholder {
+      width: 100%;
+      height: 200px;
+      background: linear-gradient(135deg, #f0ebe0, #e0d9cc);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 52px;
+    }
+    .card-body { padding: 16px; }
+    .card-category {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      margin-bottom: 8px;
+    }
+    .card-name {
+      font-size: 17px;
+      font-weight: 700;
+      color: var(--text);
+      margin-bottom: 10px;
+      line-height: 1.3;
+    }
+    .card-meta {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 6px;
+    }
+    .stars { display: flex; gap: 2px; }
+    .difficulty-badge {
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 1px;
+      padding: 4px 10px;
+      border-radius: 20px;
+      text-transform: uppercase;
+    }
+    .difficulty-easy { background: var(--easy-bg); color: var(--easy-text); }
+    .difficulty-medium { background: var(--medium-bg); color: var(--medium-text); border: 1px solid var(--medium-border); }
+    .difficulty-hard { background: #FEE2E2; color: #B91C1C; }
+    .card-description {
+      font-size: 13px;
+      color: var(--text-secondary);
+      line-height: 1.5;
+      margin: 8px 0;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+    .card-divider {
+      border: none;
+      border-top: 1px solid var(--border);
+      margin: 12px 0;
+    }
+    .card-timing {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      font-size: 12px;
+      color: var(--text-secondary);
+    }
+    .timing-item {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    /* category label colors */
+    .cat-starters { color: #2E7D32; }
+    .cat-soups-salads { color: #1565C0; }
+    .cat-mains { color: #546E7A; }
+    .cat-sides { color: #388E3C; }
+    .cat-desserts { color: #E65100; }
+    .cat-snacks { color: #6A1B9A; }
+    .cat-drinks { color: #0277BD; }
+    .cat-breakfast { color: #F57F17; }
+
+    /* ── RECIPE DETAIL ── */
+    .detail-page {
+      max-width: 760px;
+      margin: 0 auto;
+      padding: 40px 32px 80px;
+    }
+    .detail-back {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--dark-green);
+      cursor: pointer;
+      background: #fff;
+      border: 1.5px solid var(--border);
+      border-radius: 8px;
+      font-family: inherit;
+      margin-bottom: 28px;
+      padding: 9px 16px;
+      transition: border-color 0.2s, background 0.2s;
+    }
+    .detail-back:hover { border-color: var(--dark-green); background: var(--input-bg); }
+    .detail-photo {
+      width: 100%;
+      height: 340px;
+      object-fit: cover;
+      border-radius: 14px;
+      margin-bottom: 28px;
+      display: block;
+    }
+    .detail-photo-placeholder {
+      width: 100%;
+      height: 280px;
+      background: linear-gradient(135deg, #f0ebe0, #e0d9cc);
+      border-radius: 14px;
+      margin-bottom: 28px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 80px;
+    }
+    .detail-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 38px;
+      font-weight: 700;
+      color: var(--dark-green);
+      margin-bottom: 20px;
+      line-height: 1.2;
+    }
+    .detail-timing-bar {
+      background: var(--input-bg);
+      border-radius: 10px;
+      padding: 16px 24px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 24px;
+      margin-bottom: 20px;
+      border: 1px solid var(--border);
+    }
+    .timing-bar-item {
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      font-size: 14px;
+    }
+    .timing-bar-label { color: var(--text-muted); }
+    .timing-bar-value { font-weight: 700; color: var(--text); }
+    .detail-rating-row {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      margin-bottom: 24px;
+    }
+    .detail-stars { font-size: 22px; display: flex; gap: 3px; }
+    .detail-difficulty {
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 1.5px;
+      padding: 6px 16px;
+      border-radius: 20px;
+    }
+    .servings-adjuster {
+      background: var(--input-bg);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 16px 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 36px;
+    }
+    .servings-label {
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: var(--text-secondary);
+    }
+    .servings-controls {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+    }
+    .servings-btn {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      border: 1.5px solid var(--border);
+      background: #fff;
+      font-size: 20px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--text);
+      font-weight: 300;
+      transition: border-color 0.2s;
+      line-height: 1;
+    }
+    .servings-btn:hover { border-color: var(--dark-green); }
+    .servings-number {
+      font-size: 22px;
+      font-weight: 700;
+      color: var(--text);
+      min-width: 24px;
+      text-align: center;
+    }
+    .section-divider {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      margin-bottom: 18px;
+    }
+    .section-divider-label {
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      white-space: nowrap;
+    }
+    .section-divider-line {
+      flex: 1;
+      height: 1px;
+      background: var(--border);
+    }
+    .ingredients-list {
+      list-style: none;
+      margin-bottom: 40px;
+    }
+    .ingredients-list li {
+      font-size: 16px;
+      color: var(--text);
+      line-height: 1.6;
+      padding: 5px 0;
+    }
+    .method-text {
+      font-size: 16px;
+      color: var(--text);
+      line-height: 1.9;
+      margin-bottom: 48px;
+    }
+    .detail-footer {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding-top: 24px;
+      border-top: 1px solid var(--border);
+      flex-wrap: wrap;
+      gap: 16px;
+    }
+    .detail-added {
+      font-size: 13px;
+      color: var(--text-muted);
+      font-style: italic;
+    }
+    .detail-actions { display: flex; gap: 8px; flex-wrap: wrap; }
+    .btn-action {
+      padding: 10px 18px;
+      border-radius: 8px;
+      font-size: 13px;
+      font-weight: 500;
+      cursor: pointer;
+      font-family: inherit;
+      border: 1.5px solid var(--border);
+      background: #fff;
+      color: var(--text);
+      transition: border-color 0.2s;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .btn-action:hover { border-color: #999; }
+    .btn-delete { color: #D32F2F; border-color: #FFCDD2; }
+    .btn-delete:hover { border-color: #D32F2F; background: #FFF5F5; }
+
+    /* ── ADD/EDIT FORM ── */
+    .form-page {
+      max-width: 700px;
+      margin: 0 auto;
+      padding: 40px 32px 80px;
+    }
+    .form-page-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 32px;
+      color: var(--dark-green);
+      margin-bottom: 36px;
+    }
+    .form-section { margin-bottom: 28px; }
+    .form-label {
+      display: block;
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      color: var(--text-secondary);
+      margin-bottom: 8px;
+    }
+    .form-text-input {
+      width: 100%;
+      padding: 13px 16px;
+      border: 1.5px solid var(--border);
+      border-radius: 8px;
+      font-size: 15px;
+      font-family: inherit;
+      color: var(--text);
+      background: #fff;
+      outline: none;
+      transition: border-color 0.2s;
+    }
+    .form-text-input:focus { border-color: var(--dark-green); }
+    .form-text-input::placeholder { color: #bbb; }
+    .form-textarea {
+      width: 100%;
+      padding: 13px 16px;
+      border: 1.5px solid var(--border);
+      border-radius: 8px;
+      font-size: 15px;
+      font-family: inherit;
+      color: var(--text);
+      background: #fff;
+      outline: none;
+      resize: vertical;
+      min-height: 120px;
+      transition: border-color 0.2s;
+      line-height: 1.6;
+    }
+    .form-textarea:focus { border-color: var(--dark-green); }
+    .form-select {
+      width: 100%;
+      padding: 13px 16px;
+      border: 1.5px solid var(--border);
+      border-radius: 8px;
+      font-size: 15px;
+      font-family: inherit;
+      color: var(--text);
+      background: #fff;
+      outline: none;
+      transition: border-color 0.2s;
+      cursor: pointer;
+    }
+    .form-select:focus { border-color: var(--dark-green); }
+    .form-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 16px;
+    }
+    .star-selector { display: flex; gap: 6px; }
+    .star-btn {
+      font-size: 28px;
+      color: #DDD;
+      cursor: pointer;
+      background: none;
+      border: none;
+      padding: 2px;
+      transition: color 0.1s, transform 0.1s;
+      line-height: 1;
+    }
+    .star-btn:hover { transform: scale(1.15); }
+    .star-btn.filled { color: var(--star); }
+    .difficulty-selector { display: flex; gap: 10px; }
+    .diff-btn {
+      padding: 9px 22px;
+      border-radius: 20px;
+      border: 1.5px solid var(--border);
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 1px;
+      cursor: pointer;
+      font-family: inherit;
+      background: #fff;
+      color: var(--text-secondary);
+      transition: all 0.15s;
+      text-transform: uppercase;
+    }
+    .diff-btn.active-easy { background: var(--easy-bg); color: var(--easy-text); border-color: var(--easy-text); }
+    .diff-btn.active-medium { background: var(--medium-bg); color: var(--medium-text); border-color: var(--medium-border); }
+    .diff-btn.active-hard { background: #FEE2E2; color: #B91C1C; border-color: #B91C1C; }
+    .photo-upload {
+      border: 2px dashed var(--border);
+      border-radius: 12px;
+      padding: 36px;
+      text-align: center;
+      cursor: pointer;
+      transition: border-color 0.2s, background 0.2s;
+    }
+    .photo-upload:hover { border-color: var(--dark-green); background: #faf8f4; }
+    .photo-upload-icon { font-size: 36px; margin-bottom: 8px; }
+    .photo-upload-text { font-size: 14px; color: var(--text-muted); }
+    .photo-upload-input { display: none; }
+    .photo-preview { width: 100%; height: 220px; object-fit: cover; border-radius: 12px; display: block; }
+    .remove-photo-btn {
+      margin-top: 8px;
+      padding: 8px 16px;
+      border: 1.5px solid var(--border);
+      border-radius: 6px;
+      background: #fff;
+      color: var(--text-secondary);
+      font-size: 13px;
+      cursor: pointer;
+      font-family: inherit;
+    }
+    .form-submit-row {
+      display: flex;
+      gap: 12px;
+      justify-content: flex-end;
+      margin-top: 40px;
+    }
+    .btn-cancel {
+      padding: 13px 28px;
+      border: 1.5px solid var(--border);
+      border-radius: 8px;
+      background: #fff;
+      color: var(--text);
+      font-size: 14px;
+      font-weight: 500;
+      cursor: pointer;
+      font-family: inherit;
+      transition: border-color 0.2s;
+    }
+    .btn-cancel:hover { border-color: #999; }
+    .btn-save {
+      padding: 13px 32px;
+      background: var(--dark-green);
+      border: none;
+      border-radius: 8px;
+      color: #fff;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      font-family: inherit;
+      transition: opacity 0.2s;
+    }
+    .btn-save:hover { opacity: 0.88; }
+
+    /* ── EMPTY STATE ── */
+    .empty-state {
+      text-align: center;
+      padding: 80px 20px;
+      color: var(--text-muted);
+    }
+    .empty-state-icon { font-size: 52px; margin-bottom: 16px; }
+    .empty-state-text { font-size: 16px; line-height: 1.6; }
+
+    /* ── MODAL ── */
+    .modal-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.45);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 200;
+    }
+    .modal {
+      background: #fff;
+      border-radius: 14px;
+      padding: 32px;
+      max-width: 400px;
+      width: 90%;
+      box-shadow: 0 8px 32px rgba(0,0,0,0.15);
+    }
+    .modal h3 { font-size: 18px; font-weight: 700; margin-bottom: 10px; }
+    .modal p { font-size: 14px; color: var(--text-secondary); margin-bottom: 24px; line-height: 1.5; }
+    .modal-actions { display: flex; gap: 10px; justify-content: flex-end; }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 640px) {
+      .app-header { padding: 0 12px; height: auto; min-height: 56px; flex-wrap: wrap; gap: 8px; padding-top: 8px; padding-bottom: 8px; }
+      .header-brand { font-size: 16px; }
+      .header-right { gap: 6px; flex-wrap: wrap; }
+      .btn-community { padding: 6px 12px; font-size: 12px; }
+      .btn-signout { padding: 6px 12px; font-size: 12px; }
+      .page-content, .detail-page, .form-page { padding: 16px 12px 80px; }
+      .category-nav { padding: 0 4px; }
+      .cat-tab { padding: 8px 10px; font-size: 10px; }
+      .form-row { grid-template-columns: 1fr; }
+      .list-header { flex-direction: column; gap: 10px; }
+      .detail-title { font-size: 24px; }
+      .header-user { display: none; }
+      .recipe-grid { grid-template-columns: 1fr 1fr; gap: 10px; }
+      .recipe-card { font-size: 13px; }
+      .community-grid { grid-template-columns: 1fr; }
+      .community-header { padding: 0 12px; font-size: 13px; }
+      .community-content { padding: 16px 12px; }
+      .community-title-row { flex-direction: column; gap: 10px; align-items: flex-start; }
+      .share-modal { margin: 12px; padding: 20px 16px; max-height: 90vh; overflow-y: auto; }
+      .login-card { padding: 20px 16px; }
+    }
+  </style>
+</head>
+<body>
+  <div id="loading-screen" style="position:fixed;top:0;left:0;right:0;bottom:0;background:#E8E2D5;display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:9999;font-family:serif">
+    <div style="font-size:48px">✦</div>
+    <div style="font-size:26px;color:#1D3829;margin-top:12px;font-weight:600">Mise en Place</div>
+    <div style="font-size:14px;color:#888;margin-top:10px;font-family:sans-serif">Loading...</div>
+  </div>
+  <div id="root"></div>
+  <script>
+    window.onerror = function(msg, src, line) {
+      document.getElementById('loading-screen').innerHTML = '<div style="padding:30px;font-family:sans-serif;color:#c00;font-size:14px"><strong>Error loading app:</strong><br>' + msg + '<br><small>' + src + ' line ' + line + '</small></div>';
+    };
+  </script>
+  <script type="text/babel">
+    const { useState, useEffect, useRef, Component } = React;
+
+    class ErrorBoundary extends Component {
+      constructor(props) { super(props); this.state = { error: null }; }
+      static getDerivedStateFromError(e) { return { error: e }; }
+      render() {
+        if (this.state.error) {
+          return (
+            <div style={{padding:40,textAlign:'center',fontFamily:'sans-serif'}}>
+              <div style={{fontSize:48,marginBottom:16}}>😬</div>
+              <h2 style={{marginBottom:8}}>Something went wrong</h2>
+              <p style={{color:'#888',marginBottom:24}}>{this.state.error.message}</p>
+              <button onClick={() => this.setState({error:null})} style={{padding:'10px 24px',background:'#1D3829',color:'#fff',border:'none',borderRadius:8,cursor:'pointer',fontFamily:'inherit',fontSize:14}}>Try Again</button>
+            </div>
+          );
+        }
+        return this.props.children;
+      }
+    }
+
+    // ── STORAGE ──
+    // Multi-user: stored as a map of email → user object
+    const getUsers   = () => { try { return JSON.parse(localStorage.getItem('mep_users')) || {}; } catch { return {}; } };
+    const saveUsers  = us => localStorage.setItem('mep_users', JSON.stringify(us));
+    const getUser    = email => { const us = getUsers(); return email ? (us[email] || null) : null; };
+    const saveUser   = u => { const us = getUsers(); us[u.email] = u; saveUsers(us); };
+    const getCurrentUser = () => { const e = localStorage.getItem('mep_session'); return e ? getUser(e) : null; };
+
+    // ── SUPABASE (community recipes) ──
+    const SUPA_URL = 'https://optjddudiebhbljgucst.supabase.co';
+    const SUPA_KEY = 'sb_publishable_Ir1gjfM1Lc83nYN-AIYWkA_9DzZkPdk';
+    const supa = supabase.createClient(SUPA_URL, SUPA_KEY);
+
+    const LEO_EMAIL = 'leogivon9@gmail.com';
+
+    const fetchCommunityRecipes = async () => {
+      const { data, error } = await supa.from('community_recipes').select('*').eq('status','approved').order('shared_at', { ascending: false });
+      if (error) { console.warn('fetch error', error); return []; }
+      return data || [];
+    };
+    const fetchPendingRecipes = async () => {
+      const { data, error } = await supa.from('community_recipes').select('*').eq('status','pending').order('shared_at', { ascending: false });
+      if (error) { console.warn('fetch pending error', error); return []; }
+      return data || [];
+    };
+    const fetchMyPendingRecipes = async (userName) => {
+      const { data, error } = await supa.from('community_recipes').select('*').in('status', ['pending','rejected']).eq('shared_by', userName).order('shared_at', { ascending: false });
+      if (error) { console.warn('fetch my pending error', error); return []; }
+      return data || [];
+    };
+    const notifyLeo = async (recipeName, submittedBy) => {
+      try {
+        const res = await fetch('https://ntfy.sh/mep-leo-approvals', {
+          method: 'POST',
+          body: `${submittedBy} wants to share "${recipeName}" — open the app to approve or reject!`,
+          headers: {
+            'Title': '🍳 New Recipe Awaiting Approval',
+            'Priority': 'default',
+            'Tags': 'cooking'
+          }
+        });
+        console.log('ntfy status:', res.status);
+      } catch(e) { console.warn('ntfy failed:', e); }
+    };
+
+    const uploadPhotoToSupabase = async (email, recipeId, dataUrl) => {
+      if (!dataUrl || dataUrl.startsWith('http')) return dataUrl || null;
+      try {
+        const res = await fetch(dataUrl);
+        const blob = await res.blob();
+        const path = `${email.replace(/[@.]/g, '_')}/${recipeId}`;
+        const { error } = await supa.storage.from('recipe-photos').upload(path, blob, { upsert: true, contentType: blob.type || 'image/jpeg' });
+        if (error) { console.warn('photo upload error:', error); return null; }
+        const { data } = supa.storage.from('recipe-photos').getPublicUrl(path);
+        return data.publicUrl;
+      } catch(e) { console.warn('photo upload failed:', e); return null; }
+    };
+
+    const shareToCommunity = async (recipe, userName, status = 'pending', photoUrl = null) => {
+      const { error } = await supa.from('community_recipes').insert({
+        original_id: recipe.id,
+        title: recipe.name || recipe.title,
+        description: recipe.description || '',
+        category: recipe.category || '',
+        difficulty: recipe.difficulty || '',
+        rating: recipe.rating || 5,
+        prep_time: recipe.prepTime || '',
+        cook_time: recipe.cookTime || '',
+        serves: recipe.serves || '',
+        ingredients: recipe.ingredients || '',
+        method: recipe.method || '',
+        shared_by: userName,
+        status,
+        photo_url: photoUrl,
+      });
+      return !error;
+    };
+    const approveCommunityRecipe = async (id) => {
+      const { error } = await supa.from('community_recipes').update({ status: 'approved' }).eq('id', id);
+      return !error;
+    };
+    const deleteFromCommunity = async (id) => {
+      await supa.from('community_recipes').delete().eq('id', id);
+    };
+    const rejectCommunityRecipe = async (id) => {
+      await supa.from('community_recipes').update({ status: 'rejected' }).eq('id', id);
+    };
+
+    // ── MESSAGES ──
+    const sendMessage = async (fromName, fromEmail, messageText) => {
+      const { error } = await supa.from('messages').insert({
+        from_name: fromName, from_email: fromEmail, message: messageText, is_read: false
+      });
+      return !error;
+    };
+    const fetchMessages = async () => {
+      const { data, error } = await supa.from('messages').select('*').order('sent_at', { ascending: false });
+      if (error) { console.warn('fetch messages error', error); return []; }
+      return data || [];
+    };
+    const fetchUnreadMessageCount = async () => {
+      const { count, error } = await supa.from('messages').select('*', { count: 'exact', head: true }).eq('is_read', false);
+      if (error) return 0;
+      return count || 0;
+    };
+    const markAllMessagesRead = async () => {
+      await supa.from('messages').update({ is_read: true }).eq('is_read', false);
+    };
+
+    // ── INDEXEDDB FOR PHOTOS (no size limit issues) ──
+    const DB_NAME = 'mise-en-place-photos', DB_VER = 1, STORE = 'photos';
+    const openDB = () => new Promise((res, rej) => {
+      const r = indexedDB.open(DB_NAME, DB_VER);
+      r.onupgradeneeded = e => e.target.result.createObjectStore(STORE);
+      r.onsuccess = e => res(e.target.result);
+      r.onerror   = () => rej(r.error);
+    });
+    const idbPut = async (id, photo) => {
+      const db = await openDB();
+      return new Promise((res, rej) => {
+        const tx = db.transaction(STORE, 'readwrite');
+        photo ? tx.objectStore(STORE).put(photo, id) : tx.objectStore(STORE).delete(id);
+        tx.oncomplete = res; tx.onerror = () => rej(tx.error);
+      });
+    };
+    const idbGetAll = async () => {
+      const db = await openDB();
+      return new Promise((res, rej) => {
+        const tx = db.transaction(STORE, 'readonly');
+        const out = {};
+        tx.objectStore(STORE).openCursor().onsuccess = e => {
+          const c = e.target.result;
+          if (c) { out[c.key] = c.value; c.continue(); } else res(out);
+        };
+        tx.onerror = () => rej(tx.error);
+      });
+    };
+    const idbDelete = async id => {
+      const db = await openDB();
+      return new Promise((res, rej) => {
+        const tx = db.transaction(STORE, 'readwrite');
+        tx.objectStore(STORE).delete(id);
+        tx.oncomplete = res; tx.onerror = () => rej(tx.error);
+      });
+    };
+
+    // ── CLOUD RECIPE STORAGE (Supabase) with localStorage fallback ──
+    const recipeKey = email => email ? `mep_recipes_${email}` : 'mep_recipes';
+
+    const getRecipeText = (email) => {
+      try { return JSON.parse(localStorage.getItem(recipeKey(email))) || []; } catch { return []; }
+    };
+    const saveRecipeText = (recipes, email) => {
+      const slim = recipes.map(({ photo, ...r }) => r);
+      try { localStorage.setItem(recipeKey(email), JSON.stringify(slim)); } catch(e) { console.warn(e); }
+    };
+
+    const loadRecipesFromCloud = async (email) => {
+      const { data, error } = await supa.from('user_recipes').select('*').eq('user_email', email).order('created_at', { ascending: true });
+      if (error || !data || data.length === 0) return null;
+      return data.map(r => ({
+        id: r.id, name: r.name, description: r.description || '',
+        category: r.category || '', difficulty: r.difficulty || '',
+        rating: r.rating || 5, prepTime: r.prep_time || '',
+        cookTime: r.cook_time || '', serves: r.serves || '',
+        ingredients: r.ingredients || '', method: r.method || '',
+        photoUrl: r.photo_url || null, addedDate: r.added_date || '',
+      }));
+    };
+
+    const saveRecipeToCloud = async (recipe, email) => {
+      await supa.from('user_recipes').upsert({
+        id: recipe.id, user_email: email,
+        name: recipe.name || '', description: recipe.description || '',
+        category: recipe.category || '', difficulty: recipe.difficulty || '',
+        rating: recipe.rating || 5, prep_time: recipe.prepTime || '',
+        cook_time: recipe.cookTime || '', serves: recipe.serves || '',
+        ingredients: recipe.ingredients || '', method: recipe.method || '',
+        photo_url: recipe.photoUrl || null, added_date: recipe.addedDate || '',
+      }, { onConflict: 'id,user_email' });
+    };
+
+    const deleteRecipeFromCloud = async (id, email) => {
+      await supa.from('user_recipes').delete().eq('id', id).eq('user_email', email);
+    };
+
+    const saveAllRecipesToCloud = async (recipes, email) => {
+      for (const r of recipes) await saveRecipeToCloud(r, email);
+    };
+
+    // Save photos async — fire and forget from callers
+    const savePhotos = recipes => recipes.forEach(r => { if (r.photo !== undefined) idbPut(r.id, r.photo || null); });
+    const saveRecipes = recipes => { saveRecipeText(recipes); savePhotos(recipes); };
+
+    // ── CATEGORIES ──
+    const CATEGORIES = [
+      { id: 'all',         label: 'All',            fullLabel: 'All Recipes',          emoji: '✦',  colorClass: '' },
+      { id: 'starters',    label: 'Starters',        fullLabel: 'Starters & Appetisers', emoji: '🥗', colorClass: 'cat-starters' },
+      { id: 'soups-salads',label: 'Soups & Salads',  fullLabel: 'Soups & Salads',        emoji: '🥣', colorClass: 'cat-soups-salads' },
+      { id: 'mains',       label: 'Mains',           fullLabel: 'Main Course',           emoji: '🍽️', colorClass: 'cat-mains' },
+      { id: 'sides',       label: 'Sides',           fullLabel: 'Side Dishes',           emoji: '🥦', colorClass: 'cat-sides' },
+      { id: 'desserts',    label: 'Desserts',        fullLabel: 'Desserts',              emoji: '🍰', colorClass: 'cat-desserts' },
+      { id: 'snacks',      label: 'Snacks',          fullLabel: 'Snacks',                emoji: '🧀', colorClass: 'cat-snacks' },
+      { id: 'drinks',      label: 'Drinks',          fullLabel: 'Drinks',                emoji: '🥂', colorClass: 'cat-drinks' },
+      { id: 'breakfast',   label: 'Breakfast',       fullLabel: 'Breakfast & Brunch',    emoji: '🍳', colorClass: 'cat-breakfast' },
+    ];
+
+    const getCat = id => CATEGORIES.find(c => c.id === id);
+
+    const formatDate = iso => {
+      const d = new Date(iso);
+      return d.toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' });
+    };
+
+    // ── SHARED COMPONENTS ──
+    // ── IMAGE COMPRESSION ──
+    const compressImage = (file, callback) => {
+      const reader = new FileReader();
+      reader.onload = ev => {
+        const img = new Image();
+        img.onload = () => {
+          // Try progressively smaller sizes until it fits in localStorage (~300KB limit per photo)
+          const sizes   = [700, 500, 350];
+          const quality = 0.65;
+          let result = null;
+          for (const MAX of sizes) {
+            let w = img.width, h = img.height;
+            if (w > MAX || h > MAX) {
+              if (w > h) { h = Math.round(h * MAX / w); w = MAX; }
+              else       { w = Math.round(w * MAX / h); h = MAX; }
+            }
+            const canvas = document.createElement('canvas');
+            canvas.width = w; canvas.height = h;
+            canvas.getContext('2d').drawImage(img, 0, 0, w, h);
+            result = canvas.toDataURL('image/jpeg', quality);
+            // base64 length * 0.75 = approx bytes; keep under 300KB
+            if (result.length * 0.75 < 300000) break;
+          }
+          callback(result);
+        };
+        img.src = ev.target.result;
+      };
+      reader.readAsDataURL(file);
+    };
+
+    const Stars = ({ rating, size = 15 }) => (
+      <div className="stars" style={{ fontSize: size }}>
+        {[1,2,3,4,5].map(i => (
+          <span key={i} style={{ color: i <= rating ? '#D4A017' : '#DDD' }}>★</span>
+        ))}
+      </div>
+    );
+
+    const DifficultyBadge = ({ difficulty }) => {
+      const cls = { easy: 'difficulty-easy', medium: 'difficulty-medium', hard: 'difficulty-hard' }[difficulty] || 'difficulty-easy';
+      return <span className={`difficulty-badge ${cls}`}>{(difficulty || 'easy').toUpperCase()}</span>;
+    };
+
+    // ── LOGIN PAGE ──
+    const LoginPage = ({ onLogin }) => {
+      const [mode, setMode]         = useState(Object.keys(getUsers()).length > 0 ? 'signin' : 'signup');
+      const [email, setEmail]       = useState('');
+      const [name, setName]         = useState('');
+      const [password, setPassword] = useState('');
+      const [showPw, setShowPw]     = useState(false);
+      const [error, setError]       = useState('');
+
+      const switchMode = m => { setMode(m); setError(''); setEmail(''); setName(''); setPassword(''); };
+
+      const handleSubmit = e => {
+        e.preventDefault();
+        if (!email.trim() || !password.trim()) { setError('Please fill in all fields.'); return; }
+        if (mode === 'signup') {
+          if (!name.trim()) { setError('Please enter your name.'); return; }
+          if (getUser(email.trim())) { setError('An account with that email already exists.'); return; }
+          const u = { email: email.trim(), password, name: name.trim() };
+          saveUser(u);
+          onLogin(u);
+        } else {
+          const u = getUser(email.trim());
+          if (!u) { setError('No account found with that email.'); return; }
+          if (u.password === password) {
+            onLogin(u);
+          } else {
+            setError('Incorrect password.');
+          }
+        }
+      };
+
+      const handleGuestLogin = () => {
+        const adjectives = ['Hungry','Tasty','Spicy','Cheesy','Crispy','Zesty','Fluffy','Saucy'];
+        const nouns = ['Chef','Cook','Baker','Foodie','Taster','Nibbler','Muncher','Snacker'];
+        const rand = arr => arr[Math.floor(Math.random() * arr.length)];
+        const guestName = `${rand(adjectives)}${rand(nouns)}${Math.floor(Math.random()*99)+1}`;
+        const guestEmail = `guest_${Date.now()}@temp.mep`;
+        const expiresAt = Date.now() + 5 * 60 * 1000;
+        const u = { email: guestEmail, name: guestName, password: '', isTemp: true, expiresAt };
+        saveUser(u);
+        onLogin(u);
+      };
+
+      const handleReset = () => {
+        if (window.confirm('This will permanently delete ALL accounts and recipes. Continue?')) {
+          localStorage.removeItem('mep_users');
+          Object.keys(localStorage).filter(k => k.startsWith('mep_recipes_')).forEach(k => localStorage.removeItem(k));
+          localStorage.removeItem('mep_session');
+          setEmail(''); setPassword(''); setName(''); setError('');
+          setMode('signup');
+        }
+      };
+
+      return (
+        <div className="login-page">
+          <div className="login-logo">
+            <div className="login-logo-icon">✦</div>
+            <h1>Mise en Place</h1>
+            <p>Your Personal Recipe Book</p>
+          </div>
+          <div className="login-card">
+            <div className="login-tabs">
+              <button className={`login-tab ${mode === 'signin' ? 'active' : ''}`} onClick={() => switchMode('signin')}>Sign In</button>
+              <button className={`login-tab ${mode === 'signup' ? 'active' : ''}`} onClick={() => switchMode('signup')}>Create Account</button>
+            </div>
+            {error && <div className="login-error">{error}</div>}
+            <form onSubmit={handleSubmit}>
+              {mode === 'signup' && (
+                <div className="form-group">
+                  <label>Your Name</label>
+                  <input className="form-input" type="text" placeholder="e.g. Leo"
+                    value={name} onChange={e => { setError(''); setName(e.target.value); }} />
+                </div>
+              )}
+              <div className="form-group">
+                <label>Email Address</label>
+                <input className="form-input" type="email" placeholder="you@example.com"
+                  value={email} onChange={e => { setError(''); setEmail(e.target.value); }} />
+              </div>
+              <div className="form-group">
+                <label>Password</label>
+                <div className="password-wrap">
+                  <input className="form-input" type={showPw ? 'text' : 'password'}
+                    placeholder="Your password" value={password}
+                    style={{ paddingRight: 44 }}
+                    onChange={e => { setError(''); setPassword(e.target.value); }} />
+                  <button type="button" className="password-toggle" onClick={() => setShowPw(s => !s)}>
+                    {showPw ? '🙈' : '👁️'}
+                  </button>
+                </div>
+              </div>
+              <button type="submit" className="btn-signin">{mode === 'signup' ? 'Create Account →' : 'Sign In →'}</button>
+            </form>
+            <div style={{textAlign:'center',margin:'12px 0 4px'}}>
+              <span style={{fontSize:12,color:'#bbb'}}>— or —</span>
+            </div>
+            <button type="button" onClick={handleGuestLogin} style={{width:'100%',padding:'11px',background:'#f3f4f6',border:'1.5px dashed #ccc',borderRadius:10,fontFamily:'inherit',fontSize:14,fontWeight:600,color:'#555',cursor:'pointer',marginBottom:8}}>
+              👤 Try as Guest <span style={{fontSize:11,fontWeight:400,color:'#aaa'}}>(auto-deleted in 5 min)</span>
+            </button>
+            <button className="reset-link" onClick={handleReset}>Reset &amp; start over</button>
+          </div>
+        </div>
+      );
+    };
+
+    // ── RECIPE CARD ──
+    const RecipeCard = ({ recipe, onClick }) => {
+      const cat = getCat(recipe.category);
+      return (
+        <div className="recipe-card" onClick={() => onClick(recipe.id)}>
+          {(recipe.photo || recipe.photoUrl)
+            ? <img src={recipe.photo || recipe.photoUrl} alt={recipe.name} className="card-photo" />
+            : <div className="card-photo-placeholder">{cat?.emoji || '🍴'}</div>
+          }
+          <div className="card-body">
+            <div className={`card-category ${cat?.colorClass || ''}`}>
+              <span>{cat?.emoji}</span>
+              <span>{cat?.fullLabel || recipe.category}</span>
+            </div>
+            <div className="card-name">{recipe.name}</div>
+            <div className="card-meta">
+              <Stars rating={recipe.rating} />
+              <DifficultyBadge difficulty={recipe.difficulty} />
+            </div>
+            {recipe.description && (
+              <div className="card-description">{recipe.description}</div>
+            )}
+            <hr className="card-divider" />
+            <div className="card-timing">
+              {recipe.prepTime && (
+                <div className="timing-item"><span>⏱</span><span>Prep: {recipe.prepTime}</span></div>
+              )}
+              {recipe.cookTime && (
+                <div className="timing-item"><span>⏱</span><span>Cook: {recipe.cookTime}</span></div>
+              )}
+              {recipe.serves && (
+                <div className="timing-item"><span>👤</span><span>{recipe.serves}</span></div>
+              )}
+            </div>
+          </div>
+        </div>
+      );
+    };
+
+    // ── MESSAGE MODAL ──
+    const MessageModal = ({ user, onClose }) => {
+      const [text, setText] = useState('');
+      const [sending, setSending] = useState(false);
+      const [sent, setSent] = useState(false);
+
+      const handleSend = async () => {
+        if (!text.trim()) return;
+        setSending(true);
+        const ok = await sendMessage(user.name, user.email, text.trim());
+        setSending(false);
+        if (ok) { setSent(true); setTimeout(onClose, 1800); }
+        else alert('Failed to send message. Please try again!');
+      };
+
+      return (
+        <div style={{position:'fixed',inset:0,background:'rgba(0,0,0,0.45)',zIndex:1000,display:'flex',alignItems:'center',justifyContent:'center',padding:'20px'}}>
+          <div style={{background:'#fff',borderRadius:20,padding:'28px 24px',width:'100%',maxWidth:420,boxShadow:'0 8px 40px rgba(0,0,0,0.18)',fontFamily:'Inter,system-ui,sans-serif'}}>
+            {sent ? (
+              <div style={{textAlign:'center',padding:'16px 0'}}>
+                <div style={{fontSize:48,marginBottom:12}}>✅</div>
+                <div style={{fontWeight:700,fontSize:18,color:'#1D3829'}}>Message sent!</div>
+                <div style={{fontSize:13,color:'#888',marginTop:6}}>Leo will get back to you soon 👨‍🍳</div>
+              </div>
+            ) : (
+              <>
+                <div style={{display:'flex',justifyContent:'space-between',alignItems:'center',marginBottom:18}}>
+                  <div>
+                    <div style={{fontFamily:'Playfair Display,serif',fontSize:20,fontWeight:700,color:'#1D3829'}}>💬 Message Leo</div>
+                    <div style={{fontSize:12,color:'#888',marginTop:3}}>Ask a question or send feedback</div>
+                  </div>
+                  <button onClick={onClose} style={{background:'none',border:'none',fontSize:22,cursor:'pointer',color:'#999',lineHeight:1,padding:'4px'}}>✕</button>
+                </div>
+                <div style={{fontSize:12,color:'#888',marginBottom:6}}>From: <strong style={{color:'#444'}}>{user.name}</strong></div>
+                <textarea
+                  value={text}
+                  onChange={e => setText(e.target.value)}
+                  placeholder="Type your message here..."
+                  rows={5}
+                  style={{width:'100%',padding:'12px 14px',border:'1.5px solid #DDD6C8',borderRadius:10,fontFamily:'inherit',fontSize:14,resize:'vertical',background:'#FAF7F2',outline:'none',color:'#1a1a1a'}}
+                  autoFocus
+                />
+                <div style={{display:'flex',gap:10,marginTop:14}}>
+                  <button onClick={onClose} style={{flex:1,padding:'11px 0',background:'transparent',border:'1.5px solid #DDD6C8',borderRadius:10,fontFamily:'inherit',fontSize:14,color:'#666',cursor:'pointer',fontWeight:500}}>Cancel</button>
+                  <button
+                    onClick={handleSend}
+                    disabled={sending || !text.trim()}
+                    style={{flex:2,padding:'11px 0',background:'#1D3829',color:'#fff',border:'none',borderRadius:10,fontFamily:'inherit',fontSize:14,fontWeight:700,cursor:'pointer',opacity:(sending||!text.trim())?0.5:1}}>
+                    {sending ? 'Sending...' : '📨 Send Message'}
+                  </button>
+                </div>
+              </>
+            )}
+          </div>
+        </div>
+      );
+    };
+
+    // ── RECIPE LIST PAGE ──
+    const RecipeListPage = ({ user, recipes, onAdd, onView, onSignOut, onCommunity, onNotifications, onMessage }) => {
+      const [activeCategory, setActiveCategory] = useState('all');
+      const [search, setSearch] = useState('');
+      const [pendingCount, setPendingCount] = useState(0);
+      const [unreadMsgCount, setUnreadMsgCount] = useState(0);
+      const [timeLeft, setTimeLeft] = useState(null);
+
+      useEffect(() => {
+        if (user.email !== LEO_EMAIL) return;
+        const load = () => {
+          fetchPendingRecipes().then(data => setPendingCount(data.length));
+          fetchUnreadMessageCount().then(n => setUnreadMsgCount(n));
+        };
+        load();
+        const interval = setInterval(load, 15000);
+        return () => clearInterval(interval);
+      }, []);
+
+      // Guest countdown timer
+      useEffect(() => {
+        if (!user.isTemp) return;
+        const tick = () => {
+          const remaining = Math.max(0, user.expiresAt - Date.now());
+          setTimeLeft(remaining);
+          if (remaining === 0) {
+            const users = getUsers();
+            delete users[user.email];
+            saveUsers(users);
+            localStorage.removeItem(`mep_recipes_${user.email}`);
+            onSignOut();
+          }
+        };
+        tick();
+        const id = setInterval(tick, 1000);
+        return () => clearInterval(id);
+      }, [user]);
+
+      const filtered = recipes.filter(r => {
+        const matchCat    = activeCategory === 'all' || r.category === activeCategory;
+        const q           = search.toLowerCase();
+        const matchSearch = !q ||
+          (r.name || r.title || '').toLowerCase().includes(q) ||
+          (r.ingredients || '').toLowerCase().includes(q) ||
+          (r.description || '').toLowerCase().includes(q);
+        return matchCat && matchSearch;
+      });
+
+      const counts = CATEGORIES.reduce((acc, cat) => {
+        acc[cat.id] = cat.id === 'all' ? recipes.length : recipes.filter(r => r.category === cat.id).length;
+        return acc;
+      }, {});
+
+      const grouped = CATEGORIES
+        .filter(c => c.id !== 'all')
+        .map(cat => ({ cat, items: filtered.filter(r => r.category === cat.id) }))
+        .filter(g => g.items.length > 0);
+
+      const activeCat = getCat(activeCategory);
+
+      return (
+        <>
+          <header className="app-header">
+            <div className="header-brand">
+              <span className="sparkle">✦</span>
+              Mise en Place
+              <span className="slash">/ My Recipes</span>
+            </div>
+            <div className="header-right">
+              <div className="header-user">
+                Signed in as <span>{user.name}</span>
+                {user.isTemp && timeLeft !== null && (
+                  <span style={{marginLeft:8,background:'#ef4444',color:'#fff',borderRadius:6,padding:'2px 7px',fontSize:11,fontWeight:700}}>
+                    ⏱ {Math.floor(timeLeft/60000)}:{String(Math.floor((timeLeft%60000)/1000)).padStart(2,'0')}
+                  </span>
+                )}
+              </div>
+              <button className="btn-community" onClick={onCommunity} style={{position:'relative'}}>
+                🌐 Community
+                {pendingCount > 0 && (
+                  <span style={{position:'absolute',top:-7,right:-7,background:'#ef4444',color:'#fff',borderRadius:'50%',width:19,height:19,display:'flex',alignItems:'center',justifyContent:'center',fontSize:10,fontWeight:800,lineHeight:1}}>
+                    {pendingCount}
+                  </span>
+                )}
+              </button>
+              {user.email !== LEO_EMAIL && (
+                <button onClick={onMessage} style={{background:'none',border:'1px solid rgba(255,255,255,0.35)',cursor:'pointer',padding:'6px 11px',borderRadius:8,fontSize:13,fontWeight:600,color:'#fff',fontFamily:'inherit',display:'flex',alignItems:'center',gap:5}} title="Message Leo">
+                  💬 Message
+                </button>
+              )}
+              {user.email === LEO_EMAIL && (
+                <button onClick={onNotifications} style={{position:'relative',background:'none',border:'none',cursor:'pointer',padding:'6px 8px',borderRadius:8,fontSize:22,lineHeight:1,display:'flex',alignItems:'center',justifyContent:'center'}} title="Notifications">
+                  🔔
+                  {(pendingCount + unreadMsgCount) > 0 && (
+                    <span style={{position:'absolute',top:0,right:0,background:'#ef4444',color:'#fff',borderRadius:'50%',width:17,height:17,display:'flex',alignItems:'center',justifyContent:'center',fontSize:9,fontWeight:800,lineHeight:1}}>
+                      {pendingCount + unreadMsgCount}
+                    </span>
+                  )}
+                </button>
+              )}
+              <button className="btn-signout" onClick={onSignOut}>Sign Out</button>
+            </div>
+          </header>
+
+          <nav className="category-nav">
+            <div className="category-nav-inner">
+              {CATEGORIES.map(cat => (
+                <button key={cat.id}
+                  className={`cat-tab ${activeCategory === cat.id ? 'active' : ''}`}
+                  onClick={() => setActiveCategory(cat.id)}>
+                  <span>{cat.emoji}</span>
+                  <span>{cat.label.toUpperCase()}</span>
+                  <span className="cat-count">{counts[cat.id] || 0}</span>
+                </button>
+              ))}
+            </div>
+          </nav>
+
+          <div className="page-content">
+            <div className="list-header">
+              <div className="list-title">
+                <h2>{activeCat?.fullLabel || 'All Recipes'}</h2>
+                <p>{filtered.length} Recipe{filtered.length !== 1 ? 's' : ''} in your collection</p>
+              </div>
+              <button className="btn-add" onClick={onAdd}>+ Add Recipe</button>
+            </div>
+
+            <div className="search-bar">
+              <span className="search-icon">🔍</span>
+              <input type="text" placeholder="Search recipes, ingredients..."
+                value={search} onChange={e => setSearch(e.target.value)} />
+            </div>
+
+            {filtered.length === 0 ? (
+              <div className="empty-state">
+                <div className="empty-state-icon">🍴</div>
+                <div className="empty-state-text">
+                  {recipes.length === 0
+                    ? 'No recipes yet.\nHit + Add Recipe to get started!'
+                    : 'No recipes match your search.'}
+                </div>
+              </div>
+            ) : (
+              grouped.map(({ cat, items }) => (
+                <div key={cat.id} className="category-section">
+                  <div className="section-header">
+                    <span style={{ fontSize: 22 }}>{cat.emoji}</span>
+                    <h3>{cat.fullLabel}</h3>
+                    <span className="section-count">{items.length}</span>
+                  </div>
+                  <div className="recipe-grid">
+                    {items.map(r => <RecipeCard key={r.id} recipe={r} onClick={onView} />)}
+                  </div>
+                </div>
+              ))
+            )}
+          </div>
+        </>
+      );
+    };
+
+    // ── RECIPE DETAIL PAGE ──
+    const RecipeDetailPage = ({ recipe, onBack, onEdit, onDelete, onChangePhoto }) => {
+      const baseServings = parseInt(recipe.serves) || 4;
+      const [servings, setServings]         = useState(baseServings);
+      const [showDeleteConfirm, setShowDel] = useState(false);
+      const fileRef = useRef();
+      const cat     = getCat(recipe.category);
+
+      const scaleText = text => {
+        if (!text || servings === baseServings) return text;
+        const ratio = servings / baseServings;
+        return text.replace(/\b(\d+\.?\d*)\b/g, (_, n) => {
+          const scaled = parseFloat(n) * ratio;
+          return Number.isInteger(scaled) ? String(scaled) : scaled.toFixed(1);
+        });
+      };
+
+      const handlePhotoChange = e => {
+        const file = e.target.files[0];
+        if (!file) return;
+        compressImage(file, compressed => onChangePhoto(recipe.id, compressed));
+      };
+
+      return (
+        <>
+          <header className="app-header">
+            <div className="header-brand">
+              <span className="sparkle">✦</span>
+              Mise en Place
+              <span className="slash">/ My Recipes</span>
+            </div>
+          </header>
+
+          <div className="detail-page">
+            <button className="detail-back" onClick={onBack}>← Back to recipes</button>
+
+            {recipe.photo
+              ? <img src={recipe.photo} alt={recipe.name} className="detail-photo" />
+              : <div className="detail-photo-placeholder">{cat?.emoji || '🍴'}</div>
+            }
+
+            <h1 className="detail-title">{recipe.name}</h1>
+
+            <div className="detail-timing-bar">
+              {recipe.prepTime && (
+                <div className="timing-bar-item">
+                  <span>⏱</span>
+                  <span className="timing-bar-label">Prep:</span>
+                  <span className="timing-bar-value">{recipe.prepTime}</span>
+                </div>
+              )}
+              {recipe.cookTime && (
+                <div className="timing-bar-item">
+                  <span>🔥</span>
+                  <span className="timing-bar-label">Cook:</span>
+                  <span className="timing-bar-value">{recipe.cookTime}</span>
+                </div>
+              )}
+              {recipe.serves && (
+                <div className="timing-bar-item">
+                  <span>👤</span>
+                  <span className="timing-bar-label">Serves:</span>
+                  <span className="timing-bar-value">{recipe.serves}</span>
+                </div>
+              )}
+            </div>
+
+            <div className="detail-rating-row">
+              <div className="detail-stars">
+                {[1,2,3,4,5].map(i => (
+                  <span key={i} style={{ color: i <= recipe.rating ? '#D4A017' : '#DDD' }}>★</span>
+                ))}
+              </div>
+              <DifficultyBadge difficulty={recipe.difficulty} />
+            </div>
+
+            <div className="servings-adjuster">
+              <span className="servings-label">Servings</span>
+              <div className="servings-controls">
+                <button className="servings-btn" onClick={() => setServings(s => Math.max(1, s - 1))}>−</button>
+                <span className="servings-number">{servings}</span>
+                <button className="servings-btn" onClick={() => setServings(s => s + 1)}>+</button>
+              </div>
+            </div>
+
+            {recipe.ingredients && (
+              <>
+                <div className="section-divider">
+                  <span className="section-divider-label">Ingredients</span>
+                  <div className="section-divider-line" />
+                </div>
+                <ul className="ingredients-list">
+                  {scaleText(recipe.ingredients).split('\n').filter(Boolean).map((line, i) => (
+                    <li key={i}>{line}</li>
+                  ))}
+                </ul>
+              </>
+            )}
+
+            {recipe.method && (
+              <>
+                <div className="section-divider">
+                  <span className="section-divider-label">Method</span>
+                  <div className="section-divider-line" />
+                </div>
+                <div className="method-text">{recipe.method}</div>
+              </>
+            )}
+
+            {recipe.notes && (
+              <>
+                <div className="section-divider">
+                  <span className="section-divider-label">Notes</span>
+                  <div className="section-divider-line" />
+                </div>
+                <div className="method-text" style={{ fontStyle: 'italic', color: 'var(--text-secondary)' }}>{recipe.notes}</div>
+              </>
+            )}
+
+            <div className="detail-footer">
+              <span className="detail-added">Added {formatDate(recipe.addedDate)}</span>
+              <div className="detail-actions">
+                <input type="file" accept="image/*" ref={fileRef}
+                  className="photo-upload-input" onChange={handlePhotoChange} />
+                <button className="btn-action" onClick={() => fileRef.current.click()}>📷 Change Photo</button>
+                <button className="btn-action" onClick={() => onEdit(recipe.id)}>✏️ Edit</button>
+                <button className="btn-action btn-delete" onClick={() => setShowDel(true)}>🗑 Delete</button>
+              </div>
+            </div>
+          </div>
+
+          {showDeleteConfirm && (
+            <div className="modal-overlay" onClick={() => setShowDel(false)}>
+              <div className="modal" onClick={e => e.stopPropagation()}>
+                <h3>Delete recipe?</h3>
+                <p>This will permanently delete "{recipe.name}". This cannot be undone.</p>
+                <div className="modal-actions">
+                  <button className="btn-cancel" onClick={() => setShowDel(false)}>Cancel</button>
+                  <button className="btn-action btn-delete" onClick={() => onDelete(recipe.id)}>Delete</button>
+                </div>
+              </div>
+            </div>
+          )}
+        </>
+      );
+    };
+
+    // ── ADD / EDIT FORM ──
+    const RecipeForm = ({ recipe, onSave, onCancel }) => {
+      const isEdit = !!recipe;
+      const [form, setForm] = useState(recipe || {
+        name: '', category: 'starters', photo: null, rating: 5,
+        difficulty: 'easy', prepTime: '', cookTime: '', serves: '',
+        description: '', ingredients: '', method: '', notes: '',
+      });
+      const fileRef = useRef();
+
+      const update = (field, val) => setForm(f => ({ ...f, [field]: val }));
+
+      const handlePhotoChange = e => {
+        const file = e.target.files[0];
+        if (!file) return;
+        compressImage(file, compressed => update('photo', compressed));
+      };
+
+      const handleSubmit = e => {
+        e.preventDefault();
+        if (!form.name.trim()) { alert('Please enter a recipe name.'); return; }
+        onSave(form);
+      };
+
+      return (
+        <>
+          <header className="app-header">
+            <div className="header-brand">
+              <span className="sparkle">✦</span>
+              Mise en Place
+              <span className="slash">/ {isEdit ? 'Edit Recipe' : 'Add Recipe'}</span>
+            </div>
+          </header>
+
+          <form className="form-page" onSubmit={handleSubmit}>
+            <h2 className="form-page-title">{isEdit ? 'Edit Recipe' : 'Add New Recipe'}</h2>
+
+            <div className="form-section">
+              <label className="form-label">Recipe Name</label>
+              <input className="form-text-input" type="text" placeholder="e.g. spaghetti carbonara"
+                value={form.name} onChange={e => update('name', e.target.value)} />
+            </div>
+
+            <div className="form-section">
+              <label className="form-label">Category</label>
+              <select className="form-select" value={form.category}
+                onChange={e => update('category', e.target.value)}>
+                {CATEGORIES.filter(c => c.id !== 'all').map(c => (
+                  <option key={c.id} value={c.id}>{c.fullLabel}</option>
+                ))}
+              </select>
+            </div>
+
+            <div className="form-section">
+              <label className="form-label">Photo</label>
+              {form.photo ? (
+                <div>
+                  <img src={form.photo} alt="preview" className="photo-preview" />
+                  <button type="button" className="remove-photo-btn" onClick={() => update('photo', null)}>
+                    Remove photo
+                  </button>
+                </div>
+              ) : (
+                <div className="photo-upload" onClick={() => fileRef.current.click()}>
+                  <div className="photo-upload-icon">📷</div>
+                  <div className="photo-upload-text">Click to upload a photo</div>
+                  <input type="file" accept="image/*" ref={fileRef}
+                    className="photo-upload-input" onChange={handlePhotoChange} />
+                </div>
+              )}
+            </div>
+
+            <div className="form-section">
+              <label className="form-label">Rating</label>
+              <div className="star-selector">
+                {[1,2,3,4,5].map(i => (
+                  <button key={i} type="button"
+                    className={`star-btn ${i <= form.rating ? 'filled' : ''}`}
+                    onClick={() => update('rating', i)}>★</button>
+                ))}
+              </div>
+            </div>
+
+            <div className="form-section">
+              <label className="form-label">Difficulty</label>
+              <div className="difficulty-selector">
+                {['easy','medium','hard'].map(d => (
+                  <button key={d} type="button"
+                    className={`diff-btn ${form.difficulty === d ? `active-${d}` : ''}`}
+                    onClick={() => update('difficulty', d)}>
+                    {d.charAt(0).toUpperCase() + d.slice(1)}
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            <div className="form-section">
+              <label className="form-label">Timing</label>
+              <div className="form-row">
+                <div>
+                  <label className="form-label" style={{ fontSize: 10, marginBottom: 6 }}>Prep Time</label>
+                  <input className="form-text-input" type="text" placeholder="e.g. 15 mins"
+                    value={form.prepTime} onChange={e => update('prepTime', e.target.value)} />
+                </div>
+                <div>
+                  <label className="form-label" style={{ fontSize: 10, marginBottom: 6 }}>Cook Time</label>
+                  <input className="form-text-input" type="text" placeholder="e.g. 30 mins"
+                    value={form.cookTime} onChange={e => update('cookTime', e.target.value)} />
+                </div>
+                <div>
+                  <label className="form-label" style={{ fontSize: 10, marginBottom: 6 }}>Serves</label>
+                  <input className="form-text-input" type="text" placeholder="e.g. 4 people"
+                    value={form.serves} onChange={e => update('serves', e.target.value)} />
+                </div>
+              </div>
+            </div>
+
+            <div className="form-section">
+              <label className="form-label">
+                Short Description&nbsp;
+                <span style={{ color: '#bbb', fontWeight: 400, letterSpacing: 0, textTransform: 'none', fontSize: 11 }}>(optional — shown on card)</span>
+              </label>
+              <input className="form-text-input" type="text"
+                placeholder="A brief note shown on the recipe card…"
+                value={form.description} onChange={e => update('description', e.target.value)} />
+            </div>
+
+            <div className="form-section">
+              <label className="form-label">
+                Ingredients&nbsp;
+                <span style={{ color: '#bbb', fontWeight: 400, letterSpacing: 0, textTransform: 'none', fontSize: 11 }}>(one per line)</span>
+              </label>
+              <textarea className="form-textarea" rows={8}
+                placeholder={"5 small mangoes\n2 carrots\n1 cucumber\n…"}
+                value={form.ingredients} onChange={e => update('ingredients', e.target.value)} />
+            </div>
+
+            <div className="form-section">
+              <label className="form-label">Method</label>
+              <textarea className="form-textarea" rows={8}
+                placeholder="Describe the steps…"
+                value={form.method} onChange={e => update('method', e.target.value)} />
+            </div>
+
+            <div className="form-section">
+              <label className="form-label">
+                Notes&nbsp;
+                <span style={{ color: '#bbb', fontWeight: 400, letterSpacing: 0, textTransform: 'none', fontSize: 11 }}>(optional — tips, serving suggestions…)</span>
+              </label>
+              <textarea className="form-textarea" rows={3}
+                placeholder="e.g. sprinkle with sea salt for extra flavour…"
+                value={form.notes || ''} onChange={e => update('notes', e.target.value)} />
+            </div>
+
+            <div className="form-submit-row">
+              <button type="button" className="btn-cancel" onClick={onCancel}>Cancel</button>
+              <button type="submit" className="btn-save">
+                {isEdit ? 'Save Changes' : 'Add Recipe'}
+              </button>
+            </div>
+          </form>
+        </>
+      );
+    };
+
+    // ── SEED DATA ──
+    const SEED_RECIPES = [
+      {
+        id: 'seed-1',
+        name: 'vietnamese mango salad',
+        category: 'starters',
+        photo: null,
+        rating: 5,
+        difficulty: 'medium',
+        prepTime: '35 mins',
+        cookTime: '2–3 mins',
+        serves: '4 people',
+        description: '',
+        ingredients: `5 small mangoes\n2 carrots\n1 cucumber\n1 red onion\n5 tbsp of fish sauce\n2 limes\n3 tbsp of sugar\n1 red chilli finely chopped\n4 cloves of garlic\n500g of prawns\nand to top crushed peanuts and crispy shallots.`,
+        method: `Prep: Peel and julienne the 5 mangoes, carrots, and cucumber (remove cucumber seeds if very watery), thinly slice the red onion (optionally soak in cold water for 10 minutes then drain), finely chop the red chilli, and mince the garlic; peel and devein the prawns if not already done. Cook: Bring a pot of water to the boil and cook the prawns for 2–3 minutes until pink and just cooked through, then drain and cool; using a pestle and mortar, pound the garlic, chilli, and sugar into a rough paste, then add the fish sauce and lime juice and mix well—if you don't have a pestle and mortar, simply finely mince the garlic and chilli as much as possible and stir everything together in a bowl until the sugar dissolves; in a large bowl combine mango, carrot, cucumber, red onion, and prawns, pour over the dressing and toss well to coat, letting it sit for 10–15 minutes to absorb the flavours. Serve: Transfer to a serving dish and top generously with crushed peanuts and crispy shallots, serving immediately for the best texture and freshness.`,
+        addedDate: '2026-04-11',
+      },
+      {
+        id: 'seed-2',
+        name: 'vodka pasta sauce',
+        category: 'mains',
+        photo: null,
+        rating: 5,
+        difficulty: 'easy',
+        prepTime: '10-20 mins',
+        cookTime: '20-30 mins',
+        serves: '4-5 people',
+        description: 'once you have put in your passata pour a tiny bit of hot water in the can to get all the leftover passata out and add it to the sauce.',
+        ingredients: `1-2 brown onions\n500 grams of rigatoni pasta\n200 mil of double cream\nhalf a tube of tomato paste\n1 litre of passata\nchilli flakes (to garnish)\nsalt and pepper\nsome parmesan\nand a dash of vodka`,
+        method: `Prep: To start dice the onions quite small so that they melt into the sauce, and measure out the ingredients needed for this recipe.\n\nCook: Get a large pot and pour lots of olive oil out onto it. Wait until it's hot before adding in the onions. Once the onions turn slightly brown add the vodka and wait until it has fully reduced. Then add the tomato paste and let that cook for 2 mins before adding your passata sauce. After that, add in some salt and pepper and stir in the double cream. Let the sauce simmer on a low heat for 10–15 mins. Meanwhile cook your rigatoni in salted boiling water until al dente, then drain and toss through the sauce.\n\nServe: Plate up and top with parmesan and chilli flakes.`,
+        addedDate: '2026-04-08',
+      },
+      {
+        id: 'seed-3',
+        name: 'caramelised banana split',
+        category: 'desserts',
+        photo: null,
+        rating: 5,
+        difficulty: 'easy',
+        prepTime: '5 mins',
+        cookTime: '10 mins',
+        serves: '2 people',
+        description: '',
+        ingredients: `2 bananas\nsticky toffee sauce\n50 grams of pecans\nvanilla ice cream`,
+        method: `Prep:\nFirst, cut the bananas in 2 the long way. Then grab a medium size pan and roast the pecans until they are nice and dark brown tossing them occasionally. Then take them off the heat and place them in a bowl.\n\nCook:\nIn the same pan that you roasted the pecans in throw in the bananas flat side down over medium heat. When you start to develop colour on that side of the banana, grab your toffee sauce and pour lots of it in between the bananas and keep flipping them in the toffee sauce until the are very soft so they melt in your mouth.\n\nServing:\nGrab a nice small plate and place 2 banana halves seperated but parallel like an ice cream sundae. Next grab 2-3 scoops of ice cream and put them in between the bananas. Once the ice cream is plated, crush up the pecans in your hand on top of the desert and top with some more toffee sauce and voila!!! Desert sorted in 15 mins.`,
+        notes: '',
+        addedDate: '2026-04-08',
+      },
+      {
+        id: 'seed-4',
+        name: 'amazingly chocolatey chocolate cookie',
+        category: 'desserts',
+        photo: null,
+        rating: 4,
+        difficulty: 'easy',
+        prepTime: '15 mins',
+        cookTime: '12 mins',
+        serves: '4',
+        description: 'sprinkle with some coarse sea salt for some more flavour.',
+        ingredients: `50g white sugar\n150g brown sugar\n115g softened unsalted butter\na pinch of salt\n1 tsp of baking soda\n1 egg\n2tsp of vanilla extract\n21g of cocoa powder\n180g of flour\nsemi sweet dark chocolate pieces`,
+        method: `Prep:\nto make your dough add in your sugar and softened butter to a large glass bowl mixing until its smooth. then add in a pinch of salt, the baking soda, your egg, the vanilla extract, cocoa powder and flour. Mix well until its a quite firm batter, its alright if you get some stuck on your finger. Then add in your chocolate before baking at 180C for 12 mins. then flatten if needed and shape them with a cup until they are perfectly round and then voila!! perfect cookies done instantly.`,
+        notes: 'sprinkle with some coarse sea salt for some more flavour.',
+        addedDate: '2026-05-13',
+      },
+      {
+        id: 'seed-6',
+        name: 'french toast',
+        category: 'breakfast',
+        photo: null,
+        rating: 5,
+        difficulty: 'medium',
+        prepTime: '5 mins',
+        cookTime: '15 mins',
+        serves: '3-4 people',
+        description: '',
+        ingredients: `4-5 pieces of challah bread\nsugar\n3 eggs\naround 2 cups of milk\ncinnamon\nand to top it all off maple syrup`,
+        method: `Prep:\nTo start cut up the bread into medium thickness slices. Next grab a flat dish and crack your eggs in it as well as your cinnamon and your milk. Once that's done stick your bread in the liquid flipping it every so often so that it properly soaks all the way through.\n\nCook:\nStart heating your pan at medium heat with butter and place the slices of bread (that have been soaked) on the pan. then grab your sugar and sprinkle some sugar on the side that is pointing to the ceiling before you flip so it caramelises the side and repeat on the other side until you get a perfect golden brown. Remember to not have your pan too hot or else it will be raw in the middle and burnt on the outside. Serve on a nice plate and top with maple syrup and Voila!!! A quick, easy and delicious breakfast in 20 mins.`,
+        notes: '',
+        addedDate: '2026-04-10',
+      },
+      {
+        id: 'seed-5',
+        name: 'crispy smashed potatoes',
+        category: 'sides',
+        photo: null,
+        rating: 5,
+        difficulty: 'easy',
+        prepTime: '10 mins',
+        cookTime: '45 mins',
+        serves: '4 people',
+        description: 'Works brilliantly with roast chicken or steak and is perfect to dip in sour cream or aioli.',
+        ingredients: `800g baby potatoes\n3 tbsp olive oil\n4 cloves garlic, minced\n2 tsp fresh thyme leaves\nFlaky sea salt\nBlack pepper\n2 tbsp fresh parsley, chopped`,
+        method: `1. Preheat oven to 220°C (200°C fan).\n2. Boil potatoes in salted water for 20 minutes until tender. Drain and let steam dry for 5 minutes.\n3. Place on a lined baking tray. Use a flat-bottomed glass to smash each potato to about 1cm thick.\n4. Mix olive oil with garlic and thyme. Drizzle generously over potatoes.\n5. Season with flaky salt and black pepper.\n6. Roast for 25–30 minutes until golden and crispy at the edges.\n7. Scatter with fresh parsley and serve immediately.`,
+        notes: 'Works brilliantly with roast chicken or steak and is perfect to dip in sour cream or aioli.',
+        addedDate: '2026-04-12',
+      },
+    ];
+
+    (() => {
+      // ── FREE UP localStorage IMMEDIATELY ──
+      // Move any old mep_photo_* keys out of localStorage into IndexedDB right now.
+      // This prevents the browser's "storage full" quota dialog on every load.
+      const oldKeys = Object.keys(localStorage).filter(k => k.startsWith('mep_photo_'));
+      if (oldKeys.length > 0) {
+        const toMigrate = {};
+        oldKeys.forEach(k => {
+          toMigrate[k.replace('mep_photo_', '')] = localStorage.getItem(k);
+          localStorage.removeItem(k); // free space immediately
+        });
+        // Save to IndexedDB in the background
+        Object.entries(toMigrate).forEach(([id, photo]) => { if (photo) idbPut(id, photo); });
+      }
+
+      // Migrate old single mep_user → new mep_users map (preserve name as-is)
+      const oldSingleUser = (() => { try { return JSON.parse(localStorage.getItem('mep_user')); } catch { return null; } })();
+      if (oldSingleUser) {
+        if (!getUser(oldSingleUser.email)) saveUser(oldSingleUser);
+        const oldRecipes = localStorage.getItem('mep_recipes');
+        if (oldRecipes && !localStorage.getItem(recipeKey(oldSingleUser.email))) {
+          localStorage.setItem(recipeKey(oldSingleUser.email), oldRecipes);
+        }
+        localStorage.removeItem('mep_user');
+        localStorage.removeItem('mep_recipes');
+      }
+
+      // Default photo for crispy smashed potatoes
+      openDB().then(db => {
+        const tx = db.transaction(STORE, 'readonly');
+        tx.objectStore(STORE).get('seed-5').onsuccess = e => {
+          if (!e.target.result) {
+            idbPut('seed-5', 'https://www.recipetineats.com/tachyon/2018/02/Crispy-Smashed-Potatoes_4a_1500px.jpg');
+          }
+        };
+      });
+    })();
+
+    // ── COMMUNITY PAGE ──
+    const CommunityPage = ({ user, myRecipes: myRecipesProp, onBack, onSaveRecipe }) => {
+      const myRecipes = (myRecipesProp && myRecipesProp.length > 0) ? myRecipesProp : getRecipeText(user.email);
+      const isLeo = user.email === LEO_EMAIL;
+      const [communityRecipes, setCommunityRecipes] = useState([]);
+      const [pendingAll, setPendingAll] = useState([]);
+      const [pendingMine, setPendingMine] = useState([]);
+      const [loading, setLoading] = useState(true);
+      const [showShareModal, setShowShareModal] = useState(false);
+      const [selectedRecipes, setSelectedRecipes] = useState([]);
+      const [sharing, setSharing] = useState(false);
+      const [saved, setSaved] = useState({});
+      const [toast, setToast] = useState('');
+      const [shareSearch, setShareSearch] = useState('');
+      const [selectedRecipe, setSelectedRecipe] = useState(null);
+      const toastTimeoutRef = useRef(null);
+
+      const loadData = async () => {
+        const approved = await fetchCommunityRecipes();
+        setCommunityRecipes(approved);
+        if (isLeo) {
+          const pending = await fetchPendingRecipes();
+          setPendingAll(pending);
+        } else {
+          const mine = await fetchMyPendingRecipes(user.name);
+          setPendingMine(mine);
+        }
+        setLoading(false);
+      };
+
+      useEffect(() => { loadData(); }, []);
+
+      const showToast = msg => {
+        if (toastTimeoutRef.current) clearTimeout(toastTimeoutRef.current);
+        setToast(msg);
+        toastTimeoutRef.current = setTimeout(() => setToast(''), 3500);
+      };
+
+      const handleShare = async () => {
+        if (selectedRecipes.length === 0) return;
+        setSharing(true);
+        let anyFailed = false;
+        const allPhotos = await idbGetAll();
+        for (const r of selectedRecipes) {
+          const status = isLeo ? 'approved' : 'pending';
+          const localPhoto = allPhotos[r.id] || null;
+          const photoUrl = r.photoUrl || await uploadPhotoToSupabase(user.email, r.id, localPhoto);
+          const result = await shareToCommunity(r, user.name, status, photoUrl);
+          if (result === false) { anyFailed = true; } else if (!isLeo) { notifyLeo(r.name || r.title, user.name); }
+        }
+        const count = selectedRecipes.length;
+        setSharing(false);
+        setShowShareModal(false);
+        setSelectedRecipes([]);
+        await loadData();
+        if (anyFailed) {
+          showToast('⚠️ Some recipes could not be shared. Please try again.');
+        } else {
+          showToast(isLeo ? `✅ ${count} recipe${count > 1 ? 's' : ''} shared!` : `⏳ ${count} recipe${count > 1 ? 's' : ''} sent for approval!`);
+        }
+      };
+
+      const handleSave = (r) => {
+        const normalized = { ...r, name: r.name || r.title || '' };
+        onSaveRecipe(normalized);
+        setSaved(prev => ({ ...prev, [r.id]: true }));
+        showToast('❤️ Saved to your collection!');
+      };
+
+      const toggleSelect = r => {
+        setSelectedRecipes(prev =>
+          prev.find(x => x.id === r.id) ? prev.filter(x => x.id !== r.id) : [...prev, r]
+        );
+      };
+
+      const handleRemove = async (r) => {
+        if (!window.confirm(`Remove "${r.title}" from the community?`)) return;
+        await deleteFromCommunity(r.id);
+        await loadData();
+        setSelectedRecipe(null);
+        showToast('🗑️ Recipe removed from community');
+      };
+
+      const handleApprove = async (r) => {
+        await approveCommunityRecipe(r.id);
+        await loadData();
+        showToast(`✅ "${r.title}" approved and live!`);
+      };
+
+      const handleReject = async (r) => {
+        if (!window.confirm(`Reject "${r.title}"? They will be notified.`)) return;
+        await rejectCommunityRecipe(r.id);
+        await loadData();
+        showToast(`❌ "${r.title}" rejected`);
+      };
+
+      const CATS = { starters:'🥗', mains:'🍽️', sides:'🥦', desserts:'🍰', breakfast:'🍳', drinks:'🥤', snacks:'🍿', soups:'🍜' };
+
+      return (
+        <div className="community-page">
+          <header className="community-header">
+            <div className="community-header-brand">
+              <span>✦</span> Mise en Place <span style={{opacity:0.5, margin:'0 6px'}}>/</span> Community
+            </div>
+            <div className="community-header-right">
+              <button className="btn-back-recipes" onClick={onBack}>← Back to My Recipes</button>
+            </div>
+          </header>
+
+          <div className="community-content">
+            <div className="community-title-row">
+              <div>
+                <h2>Community Recipes 🌐</h2>
+                <p>Recipes shared by friends & family</p>
+              </div>
+              <button className="btn-share-recipe" onClick={() => setShowShareModal(true)}>📤 Share a Recipe</button>
+            </div>
+
+            {/* ── LEO'S OWNER PASS PANEL ── */}
+            {isLeo && pendingAll.length > 0 && (
+              <div style={{background:'#fffbea',border:'2px solid #f59e0b',borderRadius:14,padding:'20px 24px',marginBottom:28}}>
+                <div style={{display:'flex',alignItems:'center',gap:10,marginBottom:16}}>
+                  <span style={{fontSize:24}}>🔑</span>
+                  <div>
+                    <div style={{fontWeight:700,fontSize:16,color:'#92400e'}}>Owner's Pass — {pendingAll.length} Pending Approval</div>
+                    <div style={{fontSize:12,color:'#b45309',marginTop:2}}>Review these recipes before they go live to everyone</div>
+                  </div>
+                </div>
+                <div style={{display:'flex',flexDirection:'column',gap:10}}>
+                  {pendingAll.map(r => (
+                    <div key={r.id} style={{background:'#fff',border:'1.5px solid #fcd34d',borderRadius:10,padding:'14px 18px',display:'flex',alignItems:'center',justifyContent:'space-between',gap:12,flexWrap:'wrap'}}>
+                      <div style={{flex:1,minWidth:0}}>
+                        <div style={{fontWeight:700,fontSize:15,color:'#1a1a1a',overflow:'hidden',textOverflow:'ellipsis',whiteSpace:'nowrap'}}>{r.title}</div>
+                        <div style={{fontSize:12,color:'#888',marginTop:3}}>by <strong>{r.shared_by}</strong> · {r.category || 'No category'} · {r.difficulty || ''}</div>
+                      </div>
+                      <div style={{display:'flex',gap:8,flexShrink:0}}>
+                        <button onClick={() => handleApprove(r)} style={{padding:'8px 18px',background:'#1D3829',color:'#fff',border:'none',borderRadius:8,fontFamily:'inherit',fontSize:13,fontWeight:700,cursor:'pointer'}}>✅ Approve</button>
+                        <button onClick={() => handleReject(r)} style={{padding:'8px 14px',background:'transparent',border:'1.5px solid #ffaaaa',color:'#c00',borderRadius:8,fontFamily:'inherit',fontSize:13,fontWeight:600,cursor:'pointer'}}>❌ Reject</button>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            {/* ── USER'S OWN PENDING RECIPES ── */}
+            {!isLeo && pendingMine.length > 0 && (
+              <div style={{background:'#f0f9ff',border:'2px solid #bae6fd',borderRadius:14,padding:'18px 22px',marginBottom:24}}>
+                <div style={{display:'flex',alignItems:'center',gap:8,marginBottom:8}}>
+                  <span style={{fontSize:20}}>⏳</span>
+                  <div style={{fontWeight:700,fontSize:14,color:'#0369a1'}}>Being Processed ({pendingMine.length})</div>
+                </div>
+                <div style={{fontSize:13,color:'#0284c7',marginBottom:12}}>Your recipe{pendingMine.length > 1 ? 's are' : ' is'} waiting for the owner's approval. They'll appear publicly once approved!</div>
+                <div style={{display:'flex',flexDirection:'column',gap:8}}>
+                  {pendingMine.map(r => (
+                    <div key={r.id} style={{background:'#fff',border:`1.5px solid ${r.status==='rejected'?'#fca5a5':'#bae6fd'}`,borderRadius:8,padding:'10px 16px',display:'flex',alignItems:'center',justifyContent:'space-between'}}>
+                      <div>
+                        <div style={{fontWeight:600,fontSize:14}}>{r.title}</div>
+                        {r.status === 'rejected'
+                          ? <div style={{fontSize:12,color:'#dc2626',marginTop:2}}>❌ Sorry, this recipe has been rejected</div>
+                          : <div style={{fontSize:11,color:'#888',marginTop:2}}>⏳ Awaiting approval</div>
+                        }
+                      </div>
+                      <button onClick={() => handleRemove(r)} style={{background:'transparent',border:`1.5px solid ${r.status==='rejected'?'#fca5a5':'#bae6fd'}`,color:r.status==='rejected'?'#dc2626':'#0284c7',borderRadius:6,padding:'6px 12px',fontSize:12,fontFamily:'inherit',cursor:'pointer',fontWeight:600}}>
+                        {r.status === 'rejected' ? 'Dismiss' : 'Cancel'}
+                      </button>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            {loading ? (
+              <div className="community-loading">Loading recipes...</div>
+            ) : communityRecipes.length === 0 ? (
+              <div className="community-empty">
+                <div className="community-icon">👨‍🍳</div>
+                <h3>No recipes shared yet!</h3>
+                <p>Be the first to share a recipe with your friends & family.</p>
+              </div>
+            ) : (
+              <div className="community-grid">
+                {communityRecipes.map(r => {
+                  const alreadySaved = saved[r.id] || myRecipes.some(m => (m.name || m.title || '').toLowerCase() === (r.name || r.title || '').toLowerCase());
+                  const isOwner = isLeo || r.shared_by === user.name;
+                  return (
+                    <div key={r.id} className="community-card" onClick={() => setSelectedRecipe(r)}>
+                      {r.photo_url && <img src={r.photo_url} alt={r.title} style={{width:'100%',height:160,objectFit:'cover',borderRadius:'12px 12px 0 0'}} />}
+                      <div className="community-card-body">
+                        <div className="community-card-meta">
+                          <span className="community-card-cat">{CATS[r.category] || '🍴'} {r.category}</span>
+                          <span className="community-card-by">by {r.shared_by}</span>
+                        </div>
+                        <h3>{r.title}</h3>
+                        <Stars rating={r.rating || 5} size={13} />
+                        <div className="community-card-footer">
+                          <div style={{fontSize:12,color:'#888'}}>
+                            {r.prep_time && `⏱ ${r.prep_time} prep`}
+                          </div>
+                          <div style={{display:'flex',gap:6}} onClick={e => e.stopPropagation()}>
+                            {isOwner && (
+                              <button
+                                onClick={() => handleRemove(r)}
+                                style={{padding:'6px 10px',background:'transparent',border:'1.5px solid #ffaaaa',color:'#c00',borderRadius:6,fontSize:11,cursor:'pointer',fontFamily:'inherit',fontWeight:600}}>
+                                🗑️ Remove
+                              </button>
+                            )}
+                            <button
+                              className={`btn-save-recipe ${alreadySaved ? 'saved' : ''}`}
+                              onClick={() => !alreadySaved && handleSave(r)}
+                              disabled={alreadySaved}>
+                              {alreadySaved ? '✓ Saved' : '❤️ Save it'}
+                            </button>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+            )}
+          </div>
+
+          {showShareModal && (
+            <div className="share-modal-overlay" onClick={e => e.target === e.currentTarget && setShowShareModal(false)}>
+              <div className="share-modal">
+                <h3>Share a Recipe 📤</h3>
+                <p>Pick which recipes to share with friends & family:</p>
+                <div style={{display:'flex',gap:8,marginBottom:14}}>
+                  <input
+                    type="text"
+                    placeholder="Search your recipes..."
+                    value={shareSearch}
+                    onChange={e => setShareSearch(e.target.value)}
+                    style={{flex:1,padding:'10px 14px',border:'1.5px solid #ddd',borderRadius:8,fontFamily:'inherit',fontSize:14,outline:'none'}}
+                  />
+                </div>
+                <div style={{display:'block',maxHeight:300,overflowY:'auto',marginBottom:16}}>
+                  {(myRecipes || [])
+                    .filter(r => r && (r.name || r.title) && (r.name || r.title).toLowerCase().includes((shareSearch || '').toLowerCase()))
+                    .map((r, i) => {
+                      const isSelected = selectedRecipes.some(x => x.id === r.id);
+                      const recipeName = r.name || r.title || 'Untitled';
+                      return (
+                        <div key={r.id || i}
+                          onClick={() => toggleSelect(r)}
+                          style={{
+                            display:'flex', alignItems:'center', gap:12,
+                            padding:'12px 16px', border: isSelected ? '2px solid #1D3829' : '1.5px solid #ddd',
+                            borderRadius:10, cursor:'pointer',
+                            background: isSelected ? '#f0f5f0' : '#fff',
+                            marginBottom:4
+                          }}>
+                          <span style={{fontSize:18}}>{isSelected ? '✅' : '⬜'}</span>
+                          <div>
+                            <div style={{fontSize:14,fontWeight:600,color:'#1a1a1a'}}>{recipeName}</div>
+                            <div style={{fontSize:11,color:'#888',marginTop:2}}>{r.category || ''}{r.difficulty ? ` · ${r.difficulty}` : ''}{r.rating ? ` · ⭐ ${r.rating}` : ''}</div>
+                          </div>
+                        </div>
+                      );
+                    })}
+                </div>
+                <div className="share-modal-actions">
+                  <button className="btn-cancel-share" onClick={() => { setShowShareModal(false); setSelectedRecipes([]); setShareSearch(''); }}>Cancel</button>
+                  <button className="btn-confirm-share" onClick={handleShare} disabled={sharing || selectedRecipes.length === 0}>
+                    {sharing ? 'Sharing...' : `Share ${selectedRecipes.length > 0 ? selectedRecipes.length : ''} Recipe${selectedRecipes.length !== 1 ? 's' : ''}`}
+                  </button>
+                </div>
+              </div>
+            </div>
+          )}
+
+          {selectedRecipe && (
+            <div className="share-modal-overlay" onClick={e => e.target === e.currentTarget && setSelectedRecipe(null)}>
+              <div className="share-modal" style={{maxWidth:560}}>
+                <div style={{display:'flex',justifyContent:'space-between',alignItems:'flex-start',marginBottom:4}}>
+                  <h3 style={{fontFamily:'Playfair Display, serif',fontSize:24,lineHeight:1.2}}>{selectedRecipe.title}</h3>
+                  <button onClick={() => setSelectedRecipe(null)} style={{background:'none',border:'none',fontSize:22,cursor:'pointer',color:'#888',padding:'0 4px',lineHeight:1}}>×</button>
+                </div>
+                {selectedRecipe.photo_url && <img src={selectedRecipe.photo_url} alt={selectedRecipe.title} style={{width:'100%',height:200,objectFit:'cover',borderRadius:10,marginBottom:12}} />}
+                <div style={{fontSize:12,color:'#888',marginBottom:12}}>Shared by <strong>{selectedRecipe.shared_by}</strong> · {selectedRecipe.category} · {selectedRecipe.difficulty}</div>
+                <Stars rating={selectedRecipe.rating || 5} size={14} />
+                <div style={{display:'flex',gap:16,margin:'12px 0',fontSize:13,color:'#666'}}>
+                  {selectedRecipe.prep_time && <span>⏱ Prep: {selectedRecipe.prep_time}</span>}
+                  {selectedRecipe.cook_time && <span>🔥 Cook: {selectedRecipe.cook_time}</span>}
+                  {selectedRecipe.serves && <span>👥 Serves: {selectedRecipe.serves}</span>}
+                </div>
+                {selectedRecipe.description && <p style={{fontSize:14,color:'#555',marginBottom:14,lineHeight:1.6}}>{selectedRecipe.description}</p>}
+                {selectedRecipe.ingredients && (
+                  <div style={{marginBottom:14}}>
+                    <div style={{fontWeight:700,fontSize:13,textTransform:'uppercase',letterSpacing:1,marginBottom:8}}>Ingredients</div>
+                    <div style={{fontSize:14,color:'#444',lineHeight:1.8,whiteSpace:'pre-line'}}>{selectedRecipe.ingredients}</div>
+                  </div>
+                )}
+                {selectedRecipe.method && (
+                  <div style={{marginBottom:20}}>
+                    <div style={{fontWeight:700,fontSize:13,textTransform:'uppercase',letterSpacing:1,marginBottom:8}}>Method</div>
+                    <div style={{fontSize:14,color:'#444',lineHeight:1.8,whiteSpace:'pre-line'}}>{selectedRecipe.method}</div>
+                  </div>
+                )}
+                <div style={{display:'flex',gap:10,justifyContent:'flex-end'}}>
+                  {(isLeo || selectedRecipe.shared_by === user.name) && (
+                    <button onClick={() => handleRemove(selectedRecipe)} style={{padding:'10px 18px',background:'transparent',border:'1.5px solid #ffaaaa',color:'#c00',borderRadius:8,fontFamily:'inherit',fontSize:13,fontWeight:600,cursor:'pointer'}}>🗑️ Remove</button>
+                  )}
+                  {!(saved[selectedRecipe.id] || myRecipes.some(m => (m.name||m.title||'').toLowerCase() === (selectedRecipe.title||'').toLowerCase())) && (
+                    <button onClick={() => { handleSave(selectedRecipe); setSelectedRecipe(null); }} style={{padding:'10px 20px',background:'#1D3829',color:'#fff',border:'none',borderRadius:8,fontFamily:'inherit',fontSize:13,fontWeight:600,cursor:'pointer'}}>❤️ Save to my collection</button>
+                  )}
+                  <button onClick={() => setSelectedRecipe(null)} style={{padding:'10px 18px',background:'transparent',border:'1.5px solid #ddd',borderRadius:8,fontFamily:'inherit',fontSize:13,cursor:'pointer'}}>Close</button>
+                </div>
+              </div>
+            </div>
+          )}
+
+          {toast && (
+            <div style={{position:'fixed',bottom:24,left:'50%',transform:'translateX(-50%)',background:'#1D3829',color:'#fff',padding:'12px 24px',borderRadius:10,fontSize:14,fontWeight:600,zIndex:999,boxShadow:'0 4px 16px rgba(0,0,0,0.2)'}}>
+              {toast}
+            </div>
+          )}
+        </div>
+      );
+    };
+
+    // ── NOTIFICATION CENTRE ──
+    const NotificationCentre = ({ user, onBack }) => {
+      const [pendingRecipes, setPendingRecipes] = useState([]);
+      const [messages, setMessages] = useState([]);
+      const [loading, setLoading] = useState(true);
+      const [activeTab, setActiveTab] = useState('recipes');
+      const [actionLoading, setActionLoading] = useState(null);
+      const [toast, setToast] = useState('');
+      const toastRef = useRef(null);
+
+      const showToast = msg => {
+        if (toastRef.current) clearTimeout(toastRef.current);
+        setToast(msg);
+        toastRef.current = setTimeout(() => setToast(''), 3000);
+      };
+
+      const loadPending = async () => {
+        const [recipes, msgs] = await Promise.all([fetchPendingRecipes(), fetchMessages()]);
+        setPendingRecipes(recipes);
+        setMessages(msgs);
+        setLoading(false);
+        markAllMessagesRead();
+      };
+
+      useEffect(() => { loadPending(); }, []);
+
+      const handleApprove = async (r) => {
+        setActionLoading(r.id + '_approve');
+        await approveCommunityRecipe(r.id);
+        showToast(`✅ "${r.title}" is now live!`);
+        await loadPending();
+        setActionLoading(null);
+      };
+
+      const handleReject = async (r) => {
+        if (!window.confirm(`Reject "${r.title}"? They will be notified.`)) return;
+        setActionLoading(r.id + '_reject');
+        await rejectCommunityRecipe(r.id);
+        showToast(`❌ "${r.title}" rejected`);
+        await loadPending();
+        setActionLoading(null);
+      };
+
+      return (
+        <div style={{minHeight:'100vh',background:'var(--bg)',fontFamily:'Inter,system-ui,sans-serif'}}>
+          <header style={{background:'var(--header)',color:'#fff',padding:'0 24px',height:60,display:'flex',alignItems:'center',justifyContent:'space-between',position:'sticky',top:0,zIndex:100}}>
+            <div style={{fontFamily:'Playfair Display,serif',fontSize:18,fontWeight:600,display:'flex',alignItems:'center',gap:8}}>
+              <span style={{opacity:0.7}}>✦</span> Notification Centre
+            </div>
+            <button onClick={onBack} style={{background:'rgba(255,255,255,0.15)',border:'1px solid rgba(255,255,255,0.3)',color:'#fff',padding:'7px 16px',borderRadius:8,fontFamily:'inherit',fontSize:13,cursor:'pointer'}}>← Back</button>
+          </header>
+
+          <div style={{maxWidth:600,margin:'0 auto',padding:'32px 20px'}}>
+
+            {/* QR code setup */}
+            <div style={{background:'#fff',borderRadius:16,padding:'20px 24px',marginBottom:28,boxShadow:'0 2px 12px rgba(0,0,0,0.06)',display:'flex',alignItems:'center',gap:20,flexWrap:'wrap'}}>
+              <img
+                src="https://api.qrserver.com/v1/create-qr-code/?size=100x100&data=https://mise-en-place-recipe-book.netlify.app"
+                alt="QR code"
+                style={{width:100,height:100,borderRadius:8,flexShrink:0}}
+              />
+              <div>
+                <div style={{fontWeight:700,fontSize:15,marginBottom:4}}>📱 Open on your phone</div>
+                <div style={{fontSize:13,color:'#666',lineHeight:1.6}}>Scan this QR code with your phone camera to open Mise en Place directly!</div>
+              </div>
+            </div>
+
+            {/* Tabs */}
+            <div style={{display:'flex',background:'#f3f4f6',borderRadius:12,padding:4,marginBottom:24,gap:4}}>
+              <button
+                onClick={() => setActiveTab('recipes')}
+                style={{flex:1,padding:'10px 0',border:'none',borderRadius:9,fontFamily:'inherit',fontSize:13,fontWeight:600,cursor:'pointer',background:activeTab==='recipes'?'#fff':'transparent',color:activeTab==='recipes'?'#1D3829':'#888',boxShadow:activeTab==='recipes'?'0 1px 4px rgba(0,0,0,0.1)':'none',transition:'all 0.15s',position:'relative'}}>
+                🔑 Recipes
+                {!loading && pendingRecipes.length > 0 && <span style={{position:'absolute',top:4,right:8,background:'#ef4444',color:'#fff',borderRadius:'50%',width:16,height:16,display:'inline-flex',alignItems:'center',justifyContent:'center',fontSize:9,fontWeight:800}}>{pendingRecipes.length}</span>}
+              </button>
+              <button
+                onClick={() => setActiveTab('messages')}
+                style={{flex:1,padding:'10px 0',border:'none',borderRadius:9,fontFamily:'inherit',fontSize:13,fontWeight:600,cursor:'pointer',background:activeTab==='messages'?'#fff':'transparent',color:activeTab==='messages'?'#1D3829':'#888',boxShadow:activeTab==='messages'?'0 1px 4px rgba(0,0,0,0.1)':'none',transition:'all 0.15s',position:'relative'}}>
+                💬 Messages
+                {!loading && messages.length > 0 && <span style={{position:'absolute',top:4,right:8,background:'#1D3829',color:'#fff',borderRadius:'50%',width:16,height:16,display:'inline-flex',alignItems:'center',justifyContent:'center',fontSize:9,fontWeight:800}}>{messages.length}</span>}
+              </button>
+            </div>
+
+            {loading ? (
+              <div style={{textAlign:'center',padding:40,color:'#888',fontSize:14}}>Loading...</div>
+            ) : activeTab === 'recipes' ? (
+              <>
+                <div style={{fontWeight:700,fontSize:18,marginBottom:16,color:'var(--dark-green)'}}>
+                  🔑 Pending Approval {<span style={{background:'#ef4444',color:'#fff',borderRadius:20,padding:'2px 10px',fontSize:13,marginLeft:8}}>{pendingRecipes.length}</span>}
+                </div>
+                {pendingRecipes.length === 0 ? (
+                  <div style={{background:'#fff',borderRadius:16,padding:'40px 24px',textAlign:'center',boxShadow:'0 2px 12px rgba(0,0,0,0.06)'}}>
+                    <div style={{fontSize:48,marginBottom:12}}>✅</div>
+                    <div style={{fontWeight:700,fontSize:16,marginBottom:6}}>All caught up!</div>
+                    <div style={{fontSize:14,color:'#888'}}>No recipes waiting for approval.</div>
+                  </div>
+                ) : (
+                  <div style={{display:'flex',flexDirection:'column',gap:12}}>
+                    {pendingRecipes.map(r => (
+                      <div key={r.id} style={{background:'#fff',borderRadius:14,padding:'18px 20px',boxShadow:'0 2px 12px rgba(0,0,0,0.06)',border:'1.5px solid #fcd34d'}}>
+                        <div style={{display:'flex',justifyContent:'space-between',alignItems:'flex-start',marginBottom:8}}>
+                          <div>
+                            <div style={{fontWeight:700,fontSize:16,color:'#1a1a1a',marginBottom:3}}>{r.title}</div>
+                            <div style={{fontSize:13,color:'#888'}}>by <strong>{r.shared_by}</strong> · {r.category || 'No category'}{r.difficulty ? ` · ${r.difficulty}` : ''}</div>
+                          </div>
+                          <span style={{background:'#fffbea',border:'1px solid #fcd34d',color:'#92400e',borderRadius:6,padding:'3px 8px',fontSize:11,fontWeight:600,flexShrink:0,marginLeft:8}}>⏳ Pending</span>
+                        </div>
+                        {r.description && <div style={{fontSize:13,color:'#666',marginBottom:12,lineHeight:1.5}}>{r.description}</div>}
+                        <div style={{display:'flex',gap:10,marginTop:4}}>
+                          <button
+                            onClick={() => handleApprove(r)}
+                            disabled={!!actionLoading}
+                            style={{flex:1,padding:'10px 0',background:'#1D3829',color:'#fff',border:'none',borderRadius:9,fontFamily:'inherit',fontSize:14,fontWeight:700,cursor:'pointer',opacity:actionLoading===r.id+'_approve'?0.6:1}}>
+                            {actionLoading===r.id+'_approve' ? 'Approving...' : '✅ Approve'}
+                          </button>
+                          <button
+                            onClick={() => handleReject(r)}
+                            disabled={!!actionLoading}
+                            style={{flex:1,padding:'10px 0',background:'transparent',border:'2px solid #ffaaaa',color:'#c00',borderRadius:9,fontFamily:'inherit',fontSize:14,fontWeight:600,cursor:'pointer',opacity:actionLoading===r.id+'_reject'?0.6:1}}>
+                            {actionLoading===r.id+'_reject' ? 'Rejecting...' : '❌ Reject'}
+                          </button>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </>
+            ) : (
+              <>
+                <div style={{fontWeight:700,fontSize:18,marginBottom:16,color:'var(--dark-green)'}}>
+                  💬 Messages <span style={{background:'#1D3829',color:'#fff',borderRadius:20,padding:'2px 10px',fontSize:13,marginLeft:8}}>{messages.length}</span>
+                </div>
+                {messages.length === 0 ? (
+                  <div style={{background:'#fff',borderRadius:16,padding:'40px 24px',textAlign:'center',boxShadow:'0 2px 12px rgba(0,0,0,0.06)'}}>
+                    <div style={{fontSize:48,marginBottom:12}}>💬</div>
+                    <div style={{fontWeight:700,fontSize:16,marginBottom:6}}>No messages yet</div>
+                    <div style={{fontSize:14,color:'#888'}}>When users send you questions or feedback, they'll appear here.</div>
+                  </div>
+                ) : (
+                  <div style={{display:'flex',flexDirection:'column',gap:12}}>
+                    {messages.map(m => (
+                      <div key={m.id} style={{background:'#fff',borderRadius:14,padding:'18px 20px',boxShadow:'0 2px 12px rgba(0,0,0,0.06)',border:'1.5px solid #e2e8f0'}}>
+                        <div style={{display:'flex',justifyContent:'space-between',alignItems:'flex-start',marginBottom:10}}>
+                          <div style={{display:'flex',alignItems:'center',gap:8}}>
+                            <div style={{width:34,height:34,borderRadius:'50%',background:'#1D3829',color:'#fff',display:'flex',alignItems:'center',justifyContent:'center',fontWeight:700,fontSize:14,flexShrink:0}}>
+                              {m.from_name ? m.from_name[0].toUpperCase() : '?'}
+                            </div>
+                            <div>
+                              <div style={{fontWeight:700,fontSize:14,color:'#1a1a1a'}}>{m.from_name || 'Unknown'}</div>
+                              <div style={{fontSize:11,color:'#aaa'}}>{m.from_email} · {m.sent_at ? new Date(m.sent_at).toLocaleDateString('en-GB', {day:'numeric',month:'short',hour:'2-digit',minute:'2-digit'}) : ''}</div>
+                            </div>
+                          </div>
+                        </div>
+                        <div style={{fontSize:14,color:'#333',lineHeight:1.6,background:'#f8f9fa',borderRadius:10,padding:'12px 14px',whiteSpace:'pre-wrap'}}>{m.message}</div>
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </>
+            )}
+          </div>
+
+          {toast && (
+            <div style={{position:'fixed',bottom:24,left:'50%',transform:'translateX(-50%)',background:'#1D3829',color:'#fff',padding:'12px 24px',borderRadius:10,fontSize:14,fontWeight:600,zIndex:999,boxShadow:'0 4px 16px rgba(0,0,0,0.2)'}}>
+              {toast}
+            </div>
+          )}
+        </div>
+      );
+    };
+
+    // ── APP ROOT ──
+    const App = () => {
+      const [user, setUser]       = useState(() => getCurrentUser());
+      const [recipes, setRecipes] = useState(() => {
+        const u = getCurrentUser();
+        return u ? getRecipeText(u.email).map(r => ({ ...r, photo: null })) : [];
+      });
+      const [view, setView]       = useState('list');
+      const [currentId, setId]    = useState(null);
+      const [showMessageModal, setShowMessageModal] = useState(false);
+
+      // Load photos from IndexedDB after mount
+      useEffect(() => {
+        if (!user) return;
+        const load = async () => {
+          Object.keys(localStorage).filter(k => k.startsWith('mep_photo_')).forEach(k => {
+            const id = k.replace('mep_photo_', '');
+            const photo = localStorage.getItem(k);
+            if (photo) { idbPut(id, photo); localStorage.removeItem(k); }
+          });
+          const photos = await idbGetAll();
+          setRecipes(prev => prev.map(r => ({ ...r, photo: photos[r.id] || null })));
+        };
+        load();
+      }, [user]);
+
+      const persist = (r, email) => {
+        setRecipes(r);
+        saveRecipeText(r, email || user?.email);
+        // Save to cloud in background
+        const em = email || user?.email;
+        if (em) r.forEach(recipe => saveRecipeToCloud(recipe, em));
+      };
+
+      const handleLogin = u => {
+        setUser(u);
+        localStorage.setItem('mep_session', u.email);
+        setRecipes([]);
+        // Load from cloud first, fall back to localStorage
+        loadRecipesFromCloud(u.email).then(async cloudRecipes => {
+          let userRecipes = cloudRecipes;
+          if (!userRecipes) {
+            userRecipes = getRecipeText(u.email);
+            if (userRecipes.length === 0 && Object.keys(getUsers()).length === 1) {
+              userRecipes = SEED_RECIPES;
+            }
+            // Migrate localStorage recipes to cloud
+            if (userRecipes.length > 0) saveAllRecipesToCloud(userRecipes, u.email);
+          }
+          saveRecipeText(userRecipes, u.email);
+          setRecipes(userRecipes.map(r => ({ ...r, photo: null })));
+          const photos = await idbGetAll();
+          setRecipes(prev => prev.map(r => ({ ...r, photo: photos[r.id] || r.photoUrl || null })));
+        });
+      };
+      const handleSignOut       = () => { localStorage.removeItem('mep_session'); setUser(null); setRecipes([]); setView('list'); };
+      const handleAdd           = () => { setId(null); setView('add'); };
+      const handleView          = id => { setId(id);   setView('detail'); };
+      const handleEdit          = id => { setId(id);   setView('edit'); };
+      const handleBack          = () => { setView('list'); setId(null); };
+      const handleBackToDetail  = () => setView('detail');
+      const handleCommunity     = () => setView('community');
+      const handleNotifications = () => setView('notifications');
+      const handleMessage       = () => setShowMessageModal(true);
+
+      const handleSave = form => {
+        if (view === 'edit') {
+          const updated = recipes.map(r => r.id === currentId ? { ...r, ...form } : r);
+          persist(updated);
+          idbPut(currentId, form.photo || null);
+          setView('detail');
+          if (form.photo) uploadPhotoToSupabase(user.email, currentId, form.photo).then(photoUrl => {
+            if (photoUrl) setRecipes(prev => { const u = prev.map(r => r.id === currentId ? { ...r, photoUrl } : r); saveRecipeText(u, user.email); saveRecipeToCloud({...u.find(r=>r.id===currentId)}, user.email); return u; });
+          });
+        } else {
+          const newId = Date.now().toString();
+          const newR = { ...form, id: newId, addedDate: new Date().toISOString().split('T')[0] };
+          persist([...recipes, newR]);
+          idbPut(newId, form.photo || null);
+          setView('list');
+          if (form.photo) uploadPhotoToSupabase(user.email, newId, form.photo).then(photoUrl => {
+            if (photoUrl) setRecipes(prev => { const u = prev.map(r => r.id === newId ? { ...r, photoUrl } : r); saveRecipeText(u, user.email); saveRecipeToCloud({...u.find(r=>r.id===newId)}, user.email); return u; });
+          });
+        }
+      };
+
+      const handleDelete = id => {
+        idbDelete(id);
+        deleteRecipeFromCloud(id, user.email);
+        persist(recipes.filter(r => r.id !== id));
+        setView('list');
+      };
+
+      const handleChangePhoto = (id, photo) => {
+        setRecipes(prev => prev.map(r => r.id === id ? { ...r, photo } : r));
+        idbPut(id, photo);
+        if (photo) uploadPhotoToSupabase(user.email, id, photo).then(photoUrl => {
+          if (photoUrl) setRecipes(prev => { const u = prev.map(r => r.id === id ? { ...r, photoUrl } : r); saveRecipeText(u, user.email); return u; });
+        });
+      };
+
+      if (!user) return <LoginPage onLogin={handleLogin} />;
+
+      if (view === 'add') {
+        return <RecipeForm onSave={handleSave} onCancel={handleBack} />;
+      }
+
+      if (view === 'edit') {
+        const recipe = recipes.find(r => r.id === currentId);
+        if (!recipe) { setView('list'); return null; }
+        return <RecipeForm recipe={recipe} onSave={handleSave} onCancel={handleBackToDetail} />;
+      }
+
+      if (view === 'detail') {
+        const recipe = recipes.find(r => r.id === currentId);
+        if (!recipe) { setView('list'); return null; }
+        return <RecipeDetailPage recipe={recipe}
+          onBack={handleBack} onEdit={handleEdit}
+          onDelete={handleDelete} onChangePhoto={handleChangePhoto} />;
+      }
+
+      if (view === 'notifications') {
+        return <NotificationCentre user={user} onBack={handleBack} />;
+      }
+
+      if (view === 'community') {
+        return <CommunityPage user={user} myRecipes={recipes.map(({photo, ...r}) => r)} onBack={handleBack} onSaveRecipe={r => {
+          const newId = Date.now().toString();
+          const newR = { ...r, id: newId, name: r.name || r.title || '', addedDate: new Date().toISOString().split('T')[0], photo: null };
+          persist([...recipes, newR]);
+          idbPut(newId, null);
+        }} />;
+      }
+
+      return (
+        <>
+          <RecipeListPage user={user} recipes={recipes}
+            onAdd={handleAdd} onView={handleView} onSignOut={handleSignOut}
+            onCommunity={handleCommunity} onNotifications={handleNotifications}
+            onMessage={handleMessage} />
+          {showMessageModal && <MessageModal user={user} onClose={() => setShowMessageModal(false)} />}
+        </>
+      );
+    };
+
+    ReactDOM.createRoot(document.getElementById('root')).render(<ErrorBoundary><App /></ErrorBoundary>);
+    const ls = document.getElementById('loading-screen');
+    if (ls) ls.style.display = 'none';
+  </script>
+</body>
+</html>
