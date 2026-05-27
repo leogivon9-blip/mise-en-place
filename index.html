@@ -13,23 +13,23 @@
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
     :root {
-      --bg: #E8E2D5;
-      --header: #1D3829;
-      --dark-green: #1D3829;
-      --text: #1a1a1a;
-      --text-muted: #999;
-      --text-secondary: #666;
-      --border: #DDD6C8;
-      --card-bg: #fff;
-      --orange: #C1440E;
-      --star: #D4A017;
-      --easy-bg: #E8F5EA;
-      --easy-text: #2E7D32;
-      --medium-bg: #FFF8E1;
-      --medium-text: #9A6500;
-      --medium-border: #E8A000;
-      --tab-active: #C1440E;
-      --input-bg: #FAF7F2;
+      --bg: #0F172A;
+      --header: #0B1120;
+      --dark-green: #0B1120;
+      --text: #F1F5F9;
+      --text-muted: #64748B;
+      --text-secondary: #94A3B8;
+      --border: #1E293B;
+      --card-bg: #1E293B;
+      --orange: #F59E0B;
+      --star: #F59E0B;
+      --easy-bg: #0D2D1F;
+      --easy-text: #4ADE80;
+      --medium-bg: #2D1F00;
+      --medium-text: #FBB03B;
+      --medium-border: #F59E0B;
+      --tab-active: #F59E0B;
+      --input-bg: #162032;
     }
 
     body {
@@ -59,18 +59,18 @@
     .login-logo-icon {
       width: 60px;
       height: 60px;
-      background: var(--dark-green);
+      background: #F59E0B;
       border-radius: 50%;
       display: flex;
       align-items: center;
       justify-content: center;
-      color: #fff;
+      color: #0F172A;
       font-size: 22px;
     }
     .login-logo h1 {
       font-family: 'Playfair Display', serif;
       font-size: 32px;
-      color: var(--dark-green);
+      color: #F59E0B;
       font-weight: 600;
     }
     .login-logo p {
@@ -81,7 +81,7 @@
     }
     .login-tabs {
       display: flex;
-      background: #f3f4f6;
+      background: #0B1120;
       border-radius: 10px;
       padding: 4px;
       margin-bottom: 24px;
@@ -96,31 +96,33 @@
       font-family: inherit;
       font-size: 13px;
       font-weight: 600;
-      color: #888;
+      color: #64748B;
       cursor: pointer;
       transition: all 0.2s;
       letter-spacing: 0.3px;
     }
     .login-tab.active {
-      background: #fff;
-      color: var(--dark);
-      box-shadow: 0 1px 4px rgba(0,0,0,0.1);
+      background: #1E293B;
+      color: #F1F5F9;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.3);
     }
     .login-card {
-      background: #fff;
+      background: #1E293B;
       border-radius: 16px;
       padding: 36px;
       width: 100%;
       max-width: 440px;
-      box-shadow: 0 2px 20px rgba(0,0,0,0.06);
+      box-shadow: 0 2px 20px rgba(0,0,0,0.3);
+      border: 1px solid #334155;
     }
     .login-error {
-      background: #FEE2E2;
-      color: #B91C1C;
+      background: rgba(185,28,28,0.2);
+      color: #FCA5A5;
       padding: 10px 14px;
       border-radius: 6px;
       font-size: 13px;
       margin-bottom: 16px;
+      border: 1px solid rgba(185,28,28,0.4);
     }
     .form-group { margin-bottom: 20px; }
     .form-group label {
@@ -247,9 +249,9 @@
     .btn-signout:hover { border-color: #fff; }
     .btn-community {
       padding: 9px 20px;
-      background: #fff;
+      background: #F59E0B;
       border: none;
-      color: var(--dark);
+      color: #0F172A;
       border-radius: 8px;
       font-size: 12px;
       letter-spacing: 0.5px;
@@ -257,10 +259,10 @@
       cursor: pointer;
       font-family: inherit;
       font-weight: 700;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+      box-shadow: 0 2px 8px rgba(245,158,11,0.3);
       transition: transform 0.15s, box-shadow 0.15s;
     }
-    .btn-community:hover { transform: translateY(-1px); box-shadow: 0 4px 14px rgba(0,0,0,0.25); }
+    .btn-community:hover { transform: translateY(-1px); box-shadow: 0 4px 14px rgba(245,158,11,0.4); }
 
     /* ── COMMUNITY PAGE ── */
     .community-page {
@@ -337,14 +339,15 @@
       gap: 20px;
     }
     .community-card {
-      background: #fff;
+      background: var(--card-bg);
       border-radius: 14px;
       overflow: hidden;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+      box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+      border: 1px solid #334155;
       transition: transform 0.2s, box-shadow 0.2s;
       cursor: pointer;
     }
-    .community-card:hover { transform: translateY(-3px); box-shadow: 0 6px 20px rgba(0,0,0,0.1); }
+    .community-card:hover { transform: translateY(-3px); box-shadow: 0 6px 20px rgba(0,0,0,0.3); }
     .community-card-body { padding: 18px; }
     .community-card-meta {
       display: flex;
@@ -357,7 +360,7 @@
       font-weight: 700;
       letter-spacing: 1.5px;
       text-transform: uppercase;
-      color: var(--dark-green);
+      color: #F59E0B;
     }
     .community-card-by {
       font-size: 11px;
@@ -405,15 +408,16 @@
       display: flex; align-items: center; justify-content: center; z-index: 300;
     }
     .share-modal {
-      background: #fff; border-radius: 16px; padding: 32px;
+      background: #1E293B; border-radius: 16px; padding: 32px;
       max-width: 480px; width: 90%; max-height: 80vh; overflow-y: auto;
+      border: 1px solid #334155;
     }
     .share-modal h3 { font-family: 'Playfair Display', serif; font-size: 22px; margin-bottom: 6px; }
     .share-modal p { font-size: 14px; color: var(--text-secondary); margin-bottom: 14px; }
     .share-search {
       display: flex; align-items: center; gap: 10px;
-      background: #f3f4f6; border-radius: 10px; padding: 10px 14px;
-      margin-bottom: 14px;
+      background: #162032; border-radius: 10px; padding: 10px 14px;
+      margin-bottom: 14px; border: 1px solid #334155;
     }
     .share-search input {
       border: none; background: transparent; font-family: inherit;
@@ -425,8 +429,8 @@
       padding: 12px 16px; border: 1.5px solid var(--border);
       border-radius: 10px; cursor: pointer; transition: border-color 0.2s, background 0.2s;
     }
-    .share-recipe-item:hover { border-color: var(--dark-green); background: #f9f9f7; }
-    .share-recipe-item.selected { border-color: var(--dark-green); background: #f0f5f0; }
+    .share-recipe-item:hover { border-color: #F59E0B; background: #162032; }
+    .share-recipe-item.selected { border-color: #F59E0B; background: #1a2d42; }
     .share-recipe-item-info { display: flex; flex-direction: column; gap: 2px; }
     .share-recipe-item-title { font-size: 14px; font-weight: 600; color: var(--text); }
     .share-recipe-item-meta { font-size: 11px; color: var(--text-secondary); text-transform: uppercase; letter-spacing: 0.5px; }
@@ -445,7 +449,7 @@
 
     /* ── CATEGORY NAV ── */
     .category-nav {
-      background: #fff;
+      background: #0B1120;
       border-bottom: 1px solid var(--border);
       padding: 0 32px;
       overflow-x: auto;
@@ -480,8 +484,8 @@
       border-bottom-color: var(--tab-active);
     }
     .cat-count {
-      background: #1D3829;
-      color: #fff;
+      background: #334155;
+      color: #94A3B8;
       font-size: 10px;
       font-weight: 700;
       min-width: 18px;
@@ -510,7 +514,7 @@
     .list-title h2 {
       font-family: 'Playfair Display', serif;
       font-size: 36px;
-      color: var(--dark-green);
+      color: #F59E0B;
       font-weight: 600;
     }
     .list-title p {
@@ -547,7 +551,7 @@
     .search-bar input {
       width: 100%;
       padding: 16px 20px 16px 50px;
-      background: #fff;
+      background: #1E293B;
       border: 1.5px solid var(--border);
       border-radius: 40px;
       font-size: 15px;
@@ -577,7 +581,7 @@
     .section-header h3 {
       font-family: 'Playfair Display', serif;
       font-size: 22px;
-      color: var(--dark-green);
+      color: #F1F5F9;
       font-weight: 700;
     }
     .section-count {
@@ -615,7 +619,7 @@
     .card-photo-placeholder {
       width: 100%;
       height: 200px;
-      background: linear-gradient(135deg, #f0ebe0, #e0d9cc);
+      background: linear-gradient(135deg, #162032, #0B1120);
       display: flex;
       align-items: center;
       justify-content: center;
@@ -656,7 +660,7 @@
     }
     .difficulty-easy { background: var(--easy-bg); color: var(--easy-text); }
     .difficulty-medium { background: var(--medium-bg); color: var(--medium-text); border: 1px solid var(--medium-border); }
-    .difficulty-hard { background: #FEE2E2; color: #B91C1C; }
+    .difficulty-hard { background: rgba(185,28,28,0.2); color: #FCA5A5; }
     .card-description {
       font-size: 13px;
       color: var(--text-secondary);
@@ -686,14 +690,14 @@
     }
 
     /* category label colors */
-    .cat-starters { color: #2E7D32; }
-    .cat-soups-salads { color: #1565C0; }
-    .cat-mains { color: #546E7A; }
-    .cat-sides { color: #388E3C; }
-    .cat-desserts { color: #E65100; }
-    .cat-snacks { color: #6A1B9A; }
-    .cat-drinks { color: #0277BD; }
-    .cat-breakfast { color: #F57F17; }
+    .cat-starters { color: #4ADE80; }
+    .cat-soups-salads { color: #60A5FA; }
+    .cat-mains { color: #94A3B8; }
+    .cat-sides { color: #34D399; }
+    .cat-desserts { color: #F97316; }
+    .cat-snacks { color: #C084FC; }
+    .cat-drinks { color: #38BDF8; }
+    .cat-breakfast { color: #FBBF24; }
 
     /* ── RECIPE DETAIL ── */
     .detail-page {
@@ -707,17 +711,17 @@
       gap: 7px;
       font-size: 13px;
       font-weight: 600;
-      color: var(--dark-green);
+      color: #F59E0B;
       cursor: pointer;
-      background: #fff;
-      border: 1.5px solid var(--border);
+      background: #1E293B;
+      border: 1.5px solid #334155;
       border-radius: 8px;
       font-family: inherit;
       margin-bottom: 28px;
       padding: 9px 16px;
       transition: border-color 0.2s, background 0.2s;
     }
-    .detail-back:hover { border-color: var(--dark-green); background: var(--input-bg); }
+    .detail-back:hover { border-color: #F59E0B; background: #162032; }
     .detail-photo {
       width: 100%;
       height: 340px;
@@ -729,7 +733,7 @@
     .detail-photo-placeholder {
       width: 100%;
       height: 280px;
-      background: linear-gradient(135deg, #f0ebe0, #e0d9cc);
+      background: linear-gradient(135deg, #162032, #0B1120);
       border-radius: 14px;
       margin-bottom: 28px;
       display: flex;
@@ -741,7 +745,7 @@
       font-family: 'Playfair Display', serif;
       font-size: 38px;
       font-weight: 700;
-      color: var(--dark-green);
+      color: #F59E0B;
       margin-bottom: 20px;
       line-height: 1.2;
     }
@@ -803,8 +807,8 @@
       width: 36px;
       height: 36px;
       border-radius: 50%;
-      border: 1.5px solid var(--border);
-      background: #fff;
+      border: 1.5px solid #334155;
+      background: #1E293B;
       font-size: 20px;
       cursor: pointer;
       display: flex;
@@ -880,17 +884,17 @@
       font-weight: 500;
       cursor: pointer;
       font-family: inherit;
-      border: 1.5px solid var(--border);
-      background: #fff;
+      border: 1.5px solid #334155;
+      background: #1E293B;
       color: var(--text);
       transition: border-color 0.2s;
       display: flex;
       align-items: center;
       gap: 6px;
     }
-    .btn-action:hover { border-color: #999; }
-    .btn-delete { color: #D32F2F; border-color: #FFCDD2; }
-    .btn-delete:hover { border-color: #D32F2F; background: #FFF5F5; }
+    .btn-action:hover { border-color: #64748B; }
+    .btn-delete { color: #FCA5A5; border-color: #7f1d1d; }
+    .btn-delete:hover { border-color: #ef4444; background: rgba(239,68,68,0.1); }
 
     /* ── ADD/EDIT FORM ── */
     .form-page {
@@ -901,7 +905,7 @@
     .form-page-title {
       font-family: 'Playfair Display', serif;
       font-size: 32px;
-      color: var(--dark-green);
+      color: #F59E0B;
       margin-bottom: 36px;
     }
     .form-section { margin-bottom: 28px; }
@@ -917,17 +921,17 @@
     .form-text-input {
       width: 100%;
       padding: 13px 16px;
-      border: 1.5px solid var(--border);
+      border: 1.5px solid #334155;
       border-radius: 8px;
       font-size: 15px;
       font-family: inherit;
       color: var(--text);
-      background: #fff;
+      background: #162032;
       outline: none;
       transition: border-color 0.2s;
     }
-    .form-text-input:focus { border-color: var(--dark-green); }
-    .form-text-input::placeholder { color: #bbb; }
+    .form-text-input:focus { border-color: #F59E0B; }
+    .form-text-input::placeholder { color: #475569; }
     .form-textarea {
       width: 100%;
       padding: 13px 16px;
