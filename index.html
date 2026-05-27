@@ -13,14 +13,14 @@
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
     :root {
-      --bg: #0F172A;
-      --header: #0B1120;
-      --dark-green: #0B1120;
+      --bg: #1B2B3B;
+      --header: #0F1E2D;
+      --dark-green: #0F1E2D;
       --text: #F1F5F9;
-      --text-muted: #64748B;
-      --text-secondary: #94A3B8;
-      --border: #1E293B;
-      --card-bg: #1E293B;
+      --text-muted: #7A95B0;
+      --text-secondary: #A0B8D0;
+      --border: #2B4A6A;
+      --card-bg: #243B53;
       --orange: #F59E0B;
       --star: #F59E0B;
       --easy-bg: #0D2D1F;
@@ -29,7 +29,7 @@
       --medium-text: #FBB03B;
       --medium-border: #F59E0B;
       --tab-active: #F59E0B;
-      --input-bg: #162032;
+      --input-bg: #1B3045;
     }
 
     body {
@@ -81,7 +81,7 @@
     }
     .login-tabs {
       display: flex;
-      background: #0B1120;
+      background: #0F1E2D;
       border-radius: 10px;
       padding: 4px;
       margin-bottom: 24px;
@@ -102,12 +102,12 @@
       letter-spacing: 0.3px;
     }
     .login-tab.active {
-      background: #1E293B;
+      background: #243B53;
       color: #F1F5F9;
       box-shadow: 0 1px 4px rgba(0,0,0,0.3);
     }
     .login-card {
-      background: #1E293B;
+      background: #243B53;
       border-radius: 16px;
       padding: 36px;
       width: 100%;
@@ -408,7 +408,7 @@
       display: flex; align-items: center; justify-content: center; z-index: 300;
     }
     .share-modal {
-      background: #1E293B; border-radius: 16px; padding: 32px;
+      background: #243B53; border-radius: 16px; padding: 32px;
       max-width: 480px; width: 90%; max-height: 80vh; overflow-y: auto;
       border: 1px solid #334155;
     }
@@ -449,7 +449,7 @@
 
     /* ── CATEGORY NAV ── */
     .category-nav {
-      background: #0B1120;
+      background: #0F1E2D;
       border-bottom: 1px solid var(--border);
       padding: 0 32px;
       overflow-x: auto;
@@ -551,7 +551,7 @@
     .search-bar input {
       width: 100%;
       padding: 16px 20px 16px 50px;
-      background: #1E293B;
+      background: #243B53;
       border: 1.5px solid var(--border);
       border-radius: 40px;
       font-size: 15px;
@@ -601,14 +601,15 @@
       background: var(--card-bg);
       border-radius: 14px;
       overflow: hidden;
-      border: 1.5px solid transparent;
+      border: 1.5px solid #2B4A6A;
       cursor: pointer;
       transition: transform 0.2s, box-shadow 0.2s, border-color 0.2s;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+      box-shadow: 0 4px 16px rgba(0,0,0,0.25);
     }
     .recipe-card:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 8px 24px rgba(0,0,0,0.1);
+      transform: translateY(-3px);
+      box-shadow: 0 8px 28px rgba(0,0,0,0.35);
+      border-color: #F59E0B;
     }
     .card-photo {
       width: 100%;
@@ -713,8 +714,8 @@
       font-weight: 600;
       color: #F59E0B;
       cursor: pointer;
-      background: #1E293B;
-      border: 1.5px solid #334155;
+      background: #243B53;
+      border: 1.5px solid #2B4A6A;
       border-radius: 8px;
       font-family: inherit;
       margin-bottom: 28px;
@@ -807,8 +808,8 @@
       width: 36px;
       height: 36px;
       border-radius: 50%;
-      border: 1.5px solid #334155;
-      background: #1E293B;
+      border: 1.5px solid #2B4A6A;
+      background: #243B53;
       font-size: 20px;
       cursor: pointer;
       display: flex;
@@ -884,8 +885,8 @@
       font-weight: 500;
       cursor: pointer;
       font-family: inherit;
-      border: 1.5px solid #334155;
-      background: #1E293B;
+      border: 1.5px solid #2B4A6A;
+      background: #243B53;
       color: var(--text);
       transition: border-color 0.2s;
       display: flex;
