@@ -2523,7 +2523,7 @@
                     placeholder="Search your recipes..."
                     value={shareSearch}
                     onChange={e => setShareSearch(e.target.value)}
-                    style={{flex:1,padding:'10px 14px',border:'1.5px solid #ddd',borderRadius:8,fontFamily:'inherit',fontSize:14,outline:'none'}}
+                    style={{flex:1,padding:'10px 14px',border:'1.5px solid #2B4A6A',borderRadius:8,fontFamily:'inherit',fontSize:14,outline:'none',background:'#1B3045',color:'#F1F5F9'}}
                   />
                 </div>
                 <div style={{display:'block',maxHeight:300,overflowY:'auto',marginBottom:16}}>
@@ -2537,9 +2537,9 @@
                           onClick={() => toggleSelect(r)}
                           style={{
                             display:'flex', alignItems:'center', gap:12,
-                            padding:'12px 16px', border: isSelected ? '2px solid #1D3829' : '1.5px solid #ddd',
+                            padding:'12px 16px', border: isSelected ? '2px solid #F59E0B' : '1.5px solid #2B4A6A',
                             borderRadius:10, cursor:'pointer',
-                            background: isSelected ? '#f0f5f0' : '#fff',
+                            background: isSelected ? '#1a2d42' : '#1B3045',
                             marginBottom:4
                           }}>
                           <span style={{fontSize:18}}>{isSelected ? '✅' : '⬜'}</span>
