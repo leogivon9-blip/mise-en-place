@@ -165,20 +165,21 @@
     .btn-signin {
       width: 100%;
       padding: 16px;
-      background: var(--dark-green);
-      color: #fff;
+      background: linear-gradient(135deg, #F59E0B, #F97316);
+      color: #0F172A;
       border: none;
-      border-radius: 8px;
+      border-radius: 10px;
       font-size: 13px;
-      font-weight: 600;
+      font-weight: 700;
       letter-spacing: 2px;
       text-transform: uppercase;
       cursor: pointer;
       margin-top: 8px;
       font-family: inherit;
-      transition: opacity 0.2s;
+      transition: transform 0.2s, box-shadow 0.2s;
+      box-shadow: 0 4px 16px rgba(245,158,11,0.35);
     }
-    .btn-signin:hover { opacity: 0.88; }
+    .btn-signin:hover { transform: translateY(-1px); box-shadow: 0 8px 24px rgba(245,158,11,0.45); }
     .reset-link {
       display: block;
       text-align: center;
@@ -195,28 +196,31 @@
 
     /* ── HEADER ── */
     .app-header {
-      background: var(--dark-green);
+      background: linear-gradient(90deg, #0F1E2D 0%, #1B2B3B 100%);
       padding: 0 32px;
-      height: 56px;
+      height: 62px;
       display: flex;
       align-items: center;
       justify-content: space-between;
       position: sticky;
       top: 0;
       z-index: 100;
+      border-bottom: 1px solid rgba(245,158,11,0.15);
+      backdrop-filter: blur(10px);
+      box-shadow: 0 4px 24px rgba(0,0,0,0.3);
     }
     .header-brand {
       display: flex;
       align-items: center;
       font-family: 'Playfair Display', serif;
       color: #fff;
-      font-size: 18px;
+      font-size: 20px;
       gap: 0;
     }
-    .header-brand .sparkle { margin-right: 8px; }
+    .header-brand .sparkle { margin-right: 8px; color: #F59E0B; }
     .header-brand .slash {
       font-style: italic;
-      color: rgba(255,255,255,0.6);
+      color: rgba(255,255,255,0.5);
       margin-left: 8px;
       font-size: 16px;
     }
@@ -321,18 +325,19 @@
     .community-title-row p { font-size: 14px; color: var(--text-secondary); margin-top: 4px; }
     .btn-share-recipe {
       padding: 12px 24px;
-      background: var(--dark-green);
-      color: #fff;
+      background: linear-gradient(135deg, #F59E0B, #F97316);
+      color: #0F172A;
       border: none;
-      border-radius: 8px;
+      border-radius: 12px;
       font-size: 13px;
       font-family: inherit;
-      font-weight: 600;
+      font-weight: 700;
       cursor: pointer;
       letter-spacing: 0.5px;
-      transition: opacity 0.2s;
+      transition: transform 0.2s, box-shadow 0.2s;
+      box-shadow: 0 4px 16px rgba(245,158,11,0.35);
     }
-    .btn-share-recipe:hover { opacity: 0.85; }
+    .btn-share-recipe:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(245,158,11,0.45); }
     .community-grid {
       display: grid;
       grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
@@ -529,21 +534,22 @@
       align-items: center;
       gap: 8px;
       padding: 14px 24px;
-      background: var(--orange);
-      color: #fff;
+      background: linear-gradient(135deg, #F59E0B, #F97316);
+      color: #0F172A;
       border: none;
-      border-radius: 8px;
+      border-radius: 12px;
       font-size: 13px;
-      font-weight: 600;
+      font-weight: 700;
       letter-spacing: 1px;
       text-transform: uppercase;
       cursor: pointer;
       font-family: inherit;
-      transition: opacity 0.2s;
+      transition: transform 0.2s, box-shadow 0.2s;
       white-space: nowrap;
       flex-shrink: 0;
+      box-shadow: 0 4px 16px rgba(245,158,11,0.35);
     }
-    .btn-add:hover { opacity: 0.88; }
+    .btn-add:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(245,158,11,0.45); }
     .search-bar {
       position: relative;
       margin-bottom: 40px;
@@ -552,16 +558,17 @@
       width: 100%;
       padding: 16px 20px 16px 50px;
       background: #243B53;
-      border: 1.5px solid var(--border);
+      border: 1.5px solid rgba(245,158,11,0.2);
       border-radius: 40px;
       font-size: 15px;
       color: var(--text);
       font-family: inherit;
       outline: none;
-      transition: border-color 0.2s;
+      transition: border-color 0.25s, box-shadow 0.25s;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.2);
     }
-    .search-bar input:focus { border-color: var(--dark-green); }
-    .search-bar input::placeholder { color: #bbb; }
+    .search-bar input:focus { border-color: #F59E0B; box-shadow: 0 0 0 3px rgba(245,158,11,0.15); }
+    .search-bar input::placeholder { color: #7A95B0; }
     .search-icon {
       position: absolute;
       left: 18px;
@@ -596,37 +603,49 @@
       gap: 20px;
     }
 
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(18px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes shimmer {
+      0%   { background-position: -400px 0; }
+      100% { background-position: 400px 0; }
+    }
+
     /* ── RECIPE CARD ── */
     .recipe-card {
       background: var(--card-bg);
-      border-radius: 14px;
+      border-radius: 18px;
       overflow: hidden;
-      border: 1.5px solid #2B4A6A;
+      border: 1.5px solid rgba(245,158,11,0.15);
       cursor: pointer;
-      transition: transform 0.2s, box-shadow 0.2s, border-color 0.2s;
-      box-shadow: 0 4px 16px rgba(0,0,0,0.25);
+      transition: transform 0.25s cubic-bezier(.4,0,.2,1), box-shadow 0.25s, border-color 0.25s;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+      animation: fadeUp 0.4s ease both;
     }
     .recipe-card:hover {
-      transform: translateY(-3px);
-      box-shadow: 0 8px 28px rgba(0,0,0,0.35);
-      border-color: #F59E0B;
+      transform: translateY(-5px) scale(1.01);
+      box-shadow: 0 16px 40px rgba(0,0,0,0.4), 0 0 0 1px rgba(245,158,11,0.4);
+      border-color: rgba(245,158,11,0.6);
     }
     .card-photo {
       width: 100%;
       height: 200px;
       object-fit: cover;
       display: block;
+      transition: transform 0.3s ease;
     }
+    .recipe-card:hover .card-photo { transform: scale(1.04); }
     .card-photo-placeholder {
       width: 100%;
       height: 200px;
-      background: linear-gradient(135deg, #162032, #0B1120);
+      background: linear-gradient(135deg, #1B3045, #243B53);
       display: flex;
       align-items: center;
       justify-content: center;
       font-size: 52px;
     }
-    .card-body { padding: 16px; }
+    .card-body { padding: 18px; }
     .card-category {
       display: flex;
       align-items: center;
@@ -1763,13 +1782,26 @@
             </div>
           </nav>
 
-          <div className="page-content">
-            <div className="list-header">
-              <div className="list-title">
-                <h2>{activeCat?.fullLabel || 'All Recipes'}</h2>
-                <p>{filtered.length} Recipe{filtered.length !== 1 ? 's' : ''} in your collection</p>
+          {/* Hero Banner */}
+          <div style={{background:'linear-gradient(135deg, #0F1E2D 0%, #1B3045 50%, #243B53 100%)',padding:'32px 32px 28px',borderBottom:'1px solid rgba(245,158,11,0.15)',position:'relative',overflow:'hidden'}}>
+            <div style={{position:'absolute',top:-40,right:-40,width:200,height:200,borderRadius:'50%',background:'radial-gradient(circle, rgba(245,158,11,0.12) 0%, transparent 70%)',pointerEvents:'none'}} />
+            <div style={{position:'absolute',bottom:-60,left:100,width:160,height:160,borderRadius:'50%',background:'radial-gradient(circle, rgba(59,130,246,0.08) 0%, transparent 70%)',pointerEvents:'none'}} />
+            <div style={{maxWidth:1100,margin:'0 auto',display:'flex',alignItems:'center',justifyContent:'space-between',gap:16,flexWrap:'wrap'}}>
+              <div>
+                <div style={{fontFamily:'Playfair Display,serif',fontSize:28,fontWeight:700,color:'#fff',marginBottom:4}}>
+                  👨‍🍳 Welcome back, <span style={{color:'#F59E0B'}}>{user.name}</span>
+                </div>
+                <div style={{fontSize:13,color:'#7A95B0'}}>
+                  {recipes.length} recipe{recipes.length !== 1 ? 's' : ''} in your collection · What are you cooking today?
+                </div>
               </div>
               <button className="btn-add" onClick={onAdd}>+ Add Recipe</button>
+            </div>
+          </div>
+
+          <div className="page-content">
+            <div style={{display:'flex',alignItems:'center',justifyContent:'space-between',marginBottom:20,flexWrap:'wrap',gap:12}}>
+              <h2 style={{fontFamily:'Playfair Display,serif',fontSize:26,color:'#F59E0B',fontWeight:700}}>{activeCat?.fullLabel || 'All Recipes'} <span style={{fontSize:14,color:'#7A95B0',fontWeight:400,fontFamily:'Inter,sans-serif'}}>({filtered.length})</span></h2>
             </div>
 
             <div className="search-bar">
